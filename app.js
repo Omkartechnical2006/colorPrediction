@@ -14,7 +14,10 @@ app.get("/",(req,res)=>{
 });
 app.get("/home",(req,res)=>{
 res.render("home/index.ejs");
-})
+});
+app.get("/wingo",(req,res)=>{
+    res.render("games/wingo.ejs")
+});
 
 app.get("/login",(req,res)=>{
     res.render("accounts/login.ejs");
@@ -24,6 +27,9 @@ app.get("/register",(req,res)=>{
 })
 app.get("/about",(req,res)=>{
     res.render("conditions/about.ejs");
+});
+app.get("/members",(req,res)=>{
+    res.render("members/index.ejs")
 })
 
 app.listen(port,()=>{
