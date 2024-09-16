@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="description" content="">
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="css/accounts/register.css">
+</head>
+
+<body>
+    <!-- App Header -->
+    <div class="appHeader1">
+        <div class="left">
+            <a href="/login" class="icon goBack"> <img src="images/accounts/back.png" class="back"> </a>
+        </div>
+        <div class="pageTitle">Register</div>
+    </div>
+    <!-- * App Header -->
+    <!-- App Capsule -->
+    <div id="appCapsule">
+        <div class="appContent1 mb-2">
+            <form action="#" method="post" id="Register" class="card-body" autocomplete="off">
+                <p style="color:#959595; font-size:16px; font-weight:400;padding-bottom:10px;">phone number format: +91
+                </p>
+                <div class="inner-addon left-addon custom-left">
+                    <div class="number-img">
+                        <img src="images/accounts/mobile.png">
+                    </div>
+                    <span
+                        style="top: 12px;left: 30;position: absolute;font-weight:400;font-size: 17px;color: #f2413b;padding-left: 33px;">+91</span>
+                    <input type="tel" name="mobile" id="mobile" class="form-control textbox textbox1"
+                        placeholder="Mobile" onKeyPress="return isNumber(event)" maxlength="10">
+                    <a href="javascript:void(0);" class="btn-otp" id="reg_otp" onClick="mobileveryfication();">OTP</a>
+                </div>
+                <div class="inner-addon left-addon custom-left mt-3">
+                    <div class="number-img">
+                        <img src="images/accounts/lock.png">
+                    </div>
+                    <input type="password" name="password" id="password" class="form-control textbox textbox2"
+                        placeholder="Password">
+                </div>
+                <div class="inner-addon left-addon custom-left mt-3">
+                    <div class="number-img">
+                        <img class="width" src="images/accounts/refer.png">
+                    </div>
+
+                    <input type="text" name="rcode" id="rcode" class="form-control textbox textbox2"
+                        placeholder="Recommendation Code" value="">
+                </div>
+                <div class="form-group row mt-3 mb-3">
+                    <div class="col-12">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" style="background:red" checked class="custom-control-input"
+                                id="remember" name="remember">
+                            <label style="color:white" class="custom-control-label text-muted" for="remember">I Agree <a
+                                    style="color:red" data-toggle="modal" href="#privacy" data-backdrop="static"
+                                    data-keyboard="false">PRIVACY POLICY</a></label>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-center mt-3">
+                        <button type="submit" class="btn submitbtn">Register</button>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="./login" class="registerback">Already have an account, log in</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- appCapsule -->
+    <div id="registerthanksPopup" class="modal modalred fade" role="dialog">
+        <div class="modal-dialog regLog" role="document">
+            <div class="modal-content regContent">
+                <div class="modal-body">
+                    <span class="text-center">OTP sent successfully!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="privacy" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 style="font-weight:normal;">Privacy Policy</h5>
+                </div>
+
+                <div class="modal-footer">
+                    <a class="pull-left" data-dismiss="modal"><strong>CLOSE</strong></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="otpform" class="modal fade" role="dialog">
+
+        <div class="modal-dialog p-2" role="document">
+            <div class="modal-content ">
+                <div class="modal-body">
+                    <button type="button" id="otpclose" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                    <p style="color:#959595; font-size:16px; font-weight:400;">Plese Enter OTP</p>
+                    <div class="pt-1">
+                        <form action="#" method="post" id="otpsubmitForm">
+                            <div class="inner-addon left-addon custom-left mt-3">
+                                <div class="number-img">
+                                    <img src="images/accounts/verify.png">
+                                </div>
+                                <input type="text" name="otp" id="otp" class="form-control textbox textbox2"
+                                    onKeyPress="return isNumber(event)" placeholder="Enter OTP">
+                            </div>
+                            <input type="hidden" name="type" id="type" value="otpval">
+                            <div class="parent">
+                                <div style="border-radius:0 0 0 15px;" class="child"> <button
+                                        data-dismiss="modal">Cancel</button> </div>
+                                <div style="border-radius:0 0 15px 0; " class="child"> <button class="colour"
+                                        type="submit">Confirm</button> </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Main Js File -->
+    <script src="js/accounts/account.js"></script>
+
+</body>
+
+</html>

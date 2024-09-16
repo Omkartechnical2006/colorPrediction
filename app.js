@@ -15,15 +15,17 @@ app.get("/",(req,res)=>{
 app.get("/home",(req,res)=>{
 res.render("home/index.ejs");
 })
-app.get("/about",(req,res)=>{
-    res.render("about.ejs");
-})
+
 app.get("/login",(req,res)=>{
-    res.render("login.ejs");
+    res.render("accounts/login.ejs");
 })
 app.get("/register",(req,res)=>{
-    res.render("register.ejs");
+    res.render("accounts/register.ejs");
 })
+app.get("/about",(req,res)=>{
+    res.render("conditions/about.ejs");
+})
+
 app.listen(port,()=>{
 console.log(`http://localhost:${port}`);
 });

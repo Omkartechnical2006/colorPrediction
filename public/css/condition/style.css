@@ -1,0 +1,128 @@
+
+.appContent3 .back{
+    position: absolute;
+    top: 5%;
+    left: 0.6rem;
+    height: 30px;
+    }
+    .appContent3 .logo{
+        position: absolute;
+        /*right: 45%;*/
+        bottom: 0;
+        width: 300px;
+        text-align: center;
+    }
+    .appContent1{
+    position: relative;
+    z-index: 9;
+    padding:22px 18px;
+    margin-top: -0.53333rem;
+    background-color: #fff;
+    }   
+    .inner-addon{
+    border: 2px solid #FBCCCA;
+    border-radius:10px;
+    }
+    .inner-addon .icon{
+    padding:15px 12px;
+    font-size: 22px;
+    }
+    /*.left-addon.custom-left  input{*/
+    /*    padding-left:40px;*/
+    /*}*/
+    .number-img img{
+    position: absolute;
+    height:22px;
+    top: 12px;
+    left: 13px
+    }
+    .appContent3{
+    position: relative;
+    background:linear-gradient(90deg,#f95a5a 0%,#ff998e 100%) no-repeat top;
+    background-size: cover;
+    height:200px;
+    }
+    .cardheader{
+       width: 70vw;
+    }
+    .textbox1{
+    margin-left:30px;
+    }
+    .textbox2
+    {
+    margin-left:5px;
+    }
+    .textbox
+    {
+    font-size:17px;
+    width:auto;
+    }
+    .accordion {
+    border-radius:10px;}
+    .accordion .btn-link {
+    box-shadow:none;
+    margin:0px 0px;
+    color: #333 !important;
+    font-size: 17px;
+    font-weight: normal;
+    }
+    .accordion .collapsed {
+    box-shadow: 0 1px 2px 3px #f0f1f1;
+    padding:10px;
+    margin-bottom:20px;
+    font-size:18px;
+    }
+    
+    .accordion .sub-link {
+    box-shadow:none;
+    color: #333 !important;
+    font-size: 14px;
+    font-weight: normal;
+    display:block;
+    }
+    .accordion .sub-link:hover {
+    color:#00F !important;
+    }
+    .accordion .btn-link:hover {
+    background:#F5F5F5;
+    }
+    .accordion .btn-link {
+    position: relative;
+    }
+    .accordion .btn-link::after {
+    content: "\f105";
+    color: #545E68;
+    top: 13px;
+    right: 15px;
+    position: absolute;
+    font-family: "FontAwesome";
+    font-size:30px;
+    }
+    .imggg{
+    width:41px;
+    margin-right:10px;
+    }
+    .accordion .card-header .btn {
+    height:auto !important;
+    border-radius:7px !important;
+    padding:15px 40px 15px 20px;
+    display:block;
+    width:100%;
+    display:block !important;
+    text-align:left
+   }
+.appHeader1 {
+width: 100%;
+/* background-image: linear-gradient(90deg,#151963,#151963); */
+color: #fff;
+z-index: 999;
+padding: 0 24px;
+height: 56px;
+text-align: center;
+background: linear-gradient(90deg,#f95a5a 0%,#ff998e 100%);
+}
+.imr {
+width: 100%;
+display: flex;
+justify-content: center;
+}
