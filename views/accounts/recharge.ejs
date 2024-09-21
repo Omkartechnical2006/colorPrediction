@@ -1,0 +1,18 @@
+<div>
+    <h3>Scan the QR Code and make your payment:</h3>
+    <img src="<%= qrCode %>" alt="QR Code">
+</div>
+
+<form action="/submit-transaction" method="POST">
+    
+    <div> 
+        
+        <label for="transactionId">Transaction ID:</label>
+        <input type="text" name="transactionId" required />
+    </div>
+    <div>
+        <label for="amount">Amount:</label>
+        <input type="number" name="amount" required />
+    </div>
+    <button type="submit">Submit</button>
+</form>

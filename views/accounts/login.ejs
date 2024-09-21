@@ -10,6 +10,7 @@
       <link rel="stylesheet" href="css/accounts/login.css">
    </head>
    <body >
+      <%-include("../partials/flash.ejs")%>
       <div class="appContent3 text-white">
          <div   class="">
             <div  class="">
@@ -38,35 +39,34 @@
                 
                <div class="lwp">
                    <img src="images/accounts/phone.png">
-                   <span>Login With Phone</span>
+                   <span>Login With Username</span>
                </div>
                
             </div>
-            <form action="#" id="loginForm" method="post" class="card-body" autocomplete="off">
+            <form action="/login" id="loginForm" method="post" class="card-body" autocomplete="off">
                <p class="e-phone">
-                   <img class="ephone" src="images/accounts/ephone.png">Phone number</p>
+                   <img class="ephone" src="images/accounts/ephone.png">Username</p>
                <div class="inner-addon left-addon custom-left">
                   <div class="number-img">
                   </div>
                   <span style="top: 10px;left: 30;position: absolute;font-weight:400;font-size: 14px;color: #f2413b;padding-left: 10px;"></span>
-                  <input type="tel" value="" id="login_mobile" name="login_mobile"  class="form-control textbox textbox1" placeholder="Mobile" onKeyPress="return isNumber(event)" maxlength="15">
+                  <input type="tel" value="" name="username" class="form-control textbox textbox1" placeholder="enter you username" maxlength="20">
                </div>
                <p class="e-phone">
                    <img class="ephone" src="images/accounts/pass.png">Password</p>
                <div class="inner-addon  custom-left ">
                   <div class="number-img">
                   </div>
-               <input type="text" style="-webkit-text-security: square;" onkeypress="changeinputformat(this.id)" value="" id="login_password" name="login_password" class="form-control textbox textbox2" minlength="5"  placeholder="Pleasw Enter Password">
+               <input type="text" style="-webkit-text-security: square;" onkeypress="changeinputformat(this.id)"  name="password" id="login_password" name="login_password" class="form-control textbox textbox2" minlength="5"  placeholder="Please Enter Password">
                
                </div>
-               <input type="hidden" name="action" value="login">
                <div class="text-center">
                   <button type="submit" class="sumbitbtn">Log In</button>
                   
                   
                </div>
-               <div class="text-center" onclick="window.location.href = '/register';">
-                  <h class="reg" href="/register"> Register</h>
+               <div class="text-center" onclick="window.location.href = '/signup';">
+                  <h class="reg" href="/signup"> Register</h>
                   
                </div>
                <div style="font-size:17px; color: red;font-weight:400; " class="text-center mt-2 mld">
