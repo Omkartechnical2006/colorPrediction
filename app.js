@@ -55,7 +55,8 @@ app.use((req, res, next) => {
 });
 
 // MongoDB connection
-mongoose.connect('mongodb://localhost:27017/bigmumbai')
+// mongoose.connect('mongodb://localhost:27017/bigmumbai')
+mongoose.connect(process.env.MONGO_URL)
     .then(() => console.log("MongoDB connected"))
     .catch(err => console.error("MongoDB connection error:", err));
 
