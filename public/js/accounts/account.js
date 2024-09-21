@@ -1,9 +1,8 @@
-document.addEventListener('DOMContentLoaded', function() {
-
+document.addEventListener('DOMContentLoaded', function () {
     // Register Form Validation
-    document.getElementById('Register').addEventListener('submit', function(e) {
+    document.getElementById('Register').addEventListener('submit', function (e) {
         e.preventDefault();
-        
+
         var mobile = document.getElementById('mobile').value;
         var password = document.getElementById('password').value;
         var rcode = document.getElementById('rcode').value;
@@ -16,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Mobile number is required');
             return false;
         }
+
         if (mobile.length < 10) {
             document.getElementById('mobile').focus();
             document.getElementById('mobile').classList.add('borderline');
@@ -51,17 +51,18 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
 
-        // If everything is valid, submit the form (for now, just log)
+        // Submit form after successful validation
         alert('All fields are valid. Form submitted.');
+        this.submit(); // Submit form after validation
     });
 
     // Login Form Validation
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
         e.preventDefault();
 
         var loginmobile = document.getElementById('login_mobile').value;
         var loginpassword = document.getElementById('login_password').value;
-        
+
         // Validate Mobile Number
         if (loginmobile === "") {
             document.getElementById('login_mobile').focus();
@@ -90,26 +91,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
 
-        // If everything is valid, submit the form (for now, just log)
+        // Submit form after successful validation
         alert('All fields are valid. Form submitted.');
-    });
-
-    // OTP Form Validation
-    document.getElementById('otpsubmitForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        var otp = document.getElementById('otp').value;
-        
-        // Validate OTP
-        if (otp === "") {
-            document.getElementById('otp').focus();
-            document.getElementById('otp').classList.add('borderline');
-            alert('OTP is required');
-            return false;
-        }
-
-        // If OTP is valid, submit the form (for now, just log)
-        alert('OTP is valid. Form submitted.');
+        this.submit(); // Submit form after validation
     });
 
     // Mobile Verification Function
@@ -136,5 +120,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Attach mobile verification to button click
     document.getElementById('verifyMobileBtn').addEventListener('click', mobileVerification);
-
 });
+
+// Updated isNumber function to handle keypress validation
+function isNumber(e) {
+    const keyCode = e.which || e.keyCode;
+    const key = String.fromCharCode(keyCode);
+
+    if (!/^\d+$/.test(key)) {  // Check if the key is a digit
+        alert("Please enter your mobile number");
+        e.preventDefault();  // Prevent non-numeric input
+    }
+}
