@@ -28,7 +28,6 @@ setInterval(() => {
     if(wininfoimg1.style.display==="block"){
         wininfoimg1.style.display="none";
         wininfoimg2.style.display="block";
-        console.log("if printed","wininfoimg1"+wininfoimg1.style.display+" wininfo2"+wininfoimg2.style.display)
     }else if(wininfoimg1.style.display==="none"){
         wininfoimg1.style.display="block";
         wininfoimg2.style.display="none";
