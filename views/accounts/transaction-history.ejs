@@ -1,0 +1,94 @@
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    background: url('your-background-image.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+.container {
+    margin: 50px auto;
+    padding: 20px;
+    z-index: 999;
+    max-width: 900px;
+    background: rgba(255, 255, 255, 0.15); /* Frosted glass */
+    border-radius: 20px;
+    background-color: orange;
+    backdrop-filter: blur(10px); /* Blur for glass effect */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Light border */
+}
+
+h2, h3 {
+    text-align: center;
+    color: black; /* White text for contrast */
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.25); /* Slightly transparent background */
+    margin-top: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+table, th, td {
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Light border */
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    color: black;
+}
+
+thead {
+    background: rgba(255, 255, 255, 0.25); /* Transparent header */
+}
+
+tbody tr:hover {
+    background: rgba(255, 255, 255, 0.1); /* Row hover effect */
+}
+
+p {
+    color: #fff;
+    text-align: center;
+}
+
+</style>
+<div class="container">
+    <h2>Transaction History</h2>
+
+    <h3>Total Deposits: <%= totalDeposits %></h3>
+    <h3>Total Withdrawals: <%= totalWithdrawals %></h3>
+
+    <% if (transactions.length === 0) { %>
+        <p>No transactions found.</p>
+    <% } else { %>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% transactions.forEach(transaction => { %>
+                    <tr>
+                        <td><%= transaction.date.toDateString() %></td>
+                        <td>
+                            <% if (transaction.accountDetails) { %>
+                                Withdrawal
+                            <% } else { %>
+                                Deposit
+                            <% } %>
+                        </td>
+                        <td><%= transaction.amount %></td>
+                        <td><%= transaction.status %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } %>
+</div>

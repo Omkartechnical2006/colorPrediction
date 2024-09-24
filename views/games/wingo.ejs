@@ -18,6 +18,16 @@
     <!-- main styles like color of body  -->
     <link rel="stylesheet" href="css/games/wingo/index-688293f8.css">
     <style>
+        /* Hide scrollbar for Chrome, Safari, and Edge */
+        #results::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge, and Firefox */
+        #results {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
         @media only screen and (max-width: 495px) {
             .Betting__C-multiple-l {
                 display: none;
@@ -202,6 +212,8 @@
             ws = new WebSocket('ws://localhost:8080');
 
             ws.onmessage = (event) => {
+                const results = JSON.parse(event.data);
+                displayResults(results);
                 const data = JSON.parse(event.data);
                 const timeLeft = data.timeLeft.toString().padStart(2, '0'); // Ensure two digits
                 const firstDigit = timeLeft[0]; // First digit
@@ -212,7 +224,6 @@
                 document.getElementById('secondDigit').innerText = secondDigit;
                 // document.getElementById('cycleCount').innerText = "Cycle Count: " + data.cycleCount;
                 document.getElementById('cycleId').innerText = data.cycleId; // Update cycle ID
-
                 // Update class names for the divs
                 const firstDiv = document.getElementById('firstDigitDiv'); // Use specific IDs
                 const secondDiv = document.getElementById('secondDigitDiv'); // Use specific IDs
@@ -228,7 +239,7 @@
                 if (data.timeLeft > 1 && data.timeLeft <= 5) {
                     choice.classList.add("disabled");
                     overlayTimer.innerText = data.timeLeft;
-                    overlayTimer.style.display='block';
+                    overlayTimer.style.display = 'block';
                     if (!beepInterval) {
                         beepInterval = setInterval(() => {
                             beepAudio.currentTime = 0; // Reset audio to start
@@ -246,7 +257,31 @@
                     beepInterval = null; // Reset interval
                 }
             };
-
+            function displayResults(results) {
+                 const resultsDiv = document.getElementById('results');
+                // Ensure results is an array
+                if (!Array.isArray(results)) {
+                    console.error('Expected results to be an array, but received:', results);
+                    return;
+                }
+                resultsDiv.innerHTML = ''; // Clear previous results
+                results.forEach(result => {
+                    resultsDiv.innerHTML += `<div data-v-481307ec="" class="van-row">
+                        <div data-v-481307ec="" class="van-col van-col--8">${result.currCycleId}</div>
+                        <div data-v-481307ec="" class="van-col van-col--5 numcenter">
+                        <div data-v-481307ec="" class="GameRecord__C-body-num mixedColor5">${result.numberResult}</div>
+                        </div>
+                        <div data-v-481307ec="" class="van-col van-col--5">
+                            <span data-v-481307ec="">${result.bigSmallResult}</span>
+                            </div>
+                        <div data-v-481307ec="" class="van-col van-col--6">
+                        <div data-v-481307ec="" class="GameRecord__C-origin"><!--v-if--><!--v-if--><!--v-if-->
+                        <div data-v-481307ec="" class="GameRecord__C-origin-I ${result.colorResult}"></div>
+                        </div>
+                        </div>
+                        </div>`;
+                });
+            }
             ws.onclose = () => {
                 console.log('WebSocket connection closed');
             };
@@ -268,372 +303,222 @@
     </svg>
 
     <div id="app" data-v-app="">
-        <div data-v-647954c7="" class="ar-loading-view"
-            style="display: none; --f13b4d11-currentFontFamily: Roboto, Inter, sans-serif;">
-            <div data-v-647954c7="" class="loading-wrapper"><!-- <VanLoading /> -->
+        <%-include("../partials/flash.ejs")%>
+            <div data-v-647954c7="" class="ar-loading-view"
+                style="display: none; --f13b4d11-currentFontFamily: Roboto, Inter, sans-serif;">
+                <div data-v-647954c7="" class="loading-wrapper"><!-- <VanLoading /> -->
 
-            </div>
-            <div data-v-647954c7="" class="skeleton-wrapper" style="display: none;">
-                <div data-v-647954c7="" class="van-skeleton van-skeleton--animate"><!---->
-                    <div class="van-skeleton__content"><!---->
-                        <div class="van-skeleton-paragraph" style="width: 100%;"></div>
-                        <div class="van-skeleton-paragraph" style="width: 100%;"></div>
-                        <div class="van-skeleton-paragraph" stylcls
-                        e="width: 100%;"></div>
-                        <div class="van-skeleton-paragraph" style="width: 100%;"></div>
-                        <div class="van-skeleton-paragraph" style="width: 100%;"></div>
-                        <div class="van-skeleton-paragraph" style="width: 100%;"></div>
-                        <div class="van-skeleton-paragraph" style="width: 100%;"></div>
-                        <div class="van-skeleton-paragraph" style="width: 100%;"></div>
-                        <div class="van-skeleton-paragraph" style="width: 100%;"></div>
-                        <div class="van-skeleton-paragraph" style="width: 60%;"></div>
-                    </div>
                 </div>
-                <div data-v-647954c7="" class="van-skeleton van-skeleton--animate">
-                    <div class="van-skeleton-avatar van-skeleton-avatar--round"></div>
-                    <div class="van-skeleton__content">
-                        <h3 class="van-skeleton-title"></h3>
-                        <div class="van-skeleton-paragraph" style="width: 100%;"></div>
-                        <div class="van-skeleton-paragraph" style="width: 100%;"></div>
-                        <div class="van-skeleton-paragraph" style="width: 100%;"></div>
-                        <div class="van-skeleton-paragraph" style="width: 100%;"></div>
-                        <div class="van-skeleton-paragraph" style="width: 60%;"></div>
-                    </div>
-                </div>
-                <div data-v-647954c7="" class="van-skeleton van-skeleton--animate"><!---->
-                    <div class="van-skeleton__content">
-                        <h3 class="van-skeleton-title"></h3>
-                        <div class="van-skeleton-paragraph" style="width: 100%;"></div>
-                        <div class="van-skeleton-paragraph" style="width: 100%;"></div>
-                        <div class="van-skeleton-paragraph" style="width: 100%;"></div>
-                        <div class="van-skeleton-paragraph" style="width: 100%;"></div>
-                        <div class="van-skeleton-paragraph" style="width: 60%;"></div>
-                    </div>
-                </div>
-            </div>
-        </div><!--v-if-->
-        <div data-v-5d71c3fd="" class="WinGo__C" style="--f13b4d11-currentFontFamily: Roboto, Inter, sans-serif;">
-            <div data-v-12a80a3e="" data-v-5d71c3fd="" class="navbar main">
-                <div data-v-12a80a3e="" class="navbar-fixed">
-                    <div data-v-12a80a3e="" class="navbar__content">
-                        <div data-v-12a80a3e="" class="navbar__content-left"><i data-v-12a80a3e=""
-                                class="van-badge__wrapper van-icon van-icon-arrow-left"><!----><!----><!----></i></div>
-                        <div data-v-12a80a3e="" class="navbar__content-center">
-                            <div data-v-12a80a3e="" class="headLogo"
-                                style="background-image: url('https://ossimg.Big-Mumadmin888.com/bigmumbai/other/h5setting_20230814170827bjef.png');">
-                            </div>
-                            <div data-v-12a80a3e="" class="navbar__content-title"></div>
+                <div data-v-647954c7="" class="skeleton-wrapper" style="display: none;">
+                    <div data-v-647954c7="" class="van-skeleton van-skeleton--animate"><!---->
+                        <div class="van-skeleton__content"><!---->
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" stylcls e="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 60%;"></div>
                         </div>
-                        <div data-v-12a80a3e="" class="navbar__content-right">
-                            <div data-v-5d71c3fd="" class="WinGo__C-head-more">
+                    </div>
+                    <div data-v-647954c7="" class="van-skeleton van-skeleton--animate">
+                        <div class="van-skeleton-avatar van-skeleton-avatar--round"></div>
+                        <div class="van-skeleton__content">
+                            <h3 class="van-skeleton-title"></h3>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 60%;"></div>
+                        </div>
+                    </div>
+                    <div data-v-647954c7="" class="van-skeleton van-skeleton--animate"><!---->
+                        <div class="van-skeleton__content">
+                            <h3 class="van-skeleton-title"></h3>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 60%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div><!--v-if-->
+            <div data-v-5d71c3fd="" class="WinGo__C" style="--f13b4d11-currentFontFamily: Roboto, Inter, sans-serif;">
+                <div data-v-12a80a3e="" data-v-5d71c3fd="" class="navbar main">
+                    <div data-v-12a80a3e="" class="navbar-fixed">
+                        <div data-v-12a80a3e="" class="navbar__content">
+                            <div data-v-12a80a3e="" class="navbar__content-left" onclick="window.location.href='/home'">
+                                <i data-v-12a80a3e=""
+                                    class="van-badge__wrapper van-icon van-icon-arrow-left"><!----><!----><!----></i>
+                            </div>
+                            <div data-v-12a80a3e="" class="navbar__content-center">
+                                <div data-v-12a80a3e="" class="headLogo"
+                                    style="background-image: url('https://ossimg.Big-Mumadmin888.com/bigmumbai/other/h5setting_20230814170827bjef.png');">
+                                </div>
+                                <div data-v-12a80a3e="" class="navbar__content-title"></div>
+                            </div>
+                            <div data-v-12a80a3e="" class="navbar__content-right">
+                                <div data-v-5d71c3fd="" class="WinGo__C-head-more">
+                                    <div data-v-5d71c3fd=""></div>
+                                    <div data-v-5d71c3fd="" class=""></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- 钱包余额 -->
+                <div data-v-7dd1adab="" data-v-5d71c3fd="" class="Wallet__C">
+                    <div data-v-7dd1adab="" class="Wallet__C-balance">
+                        <div data-v-7dd1adab="" class="Wallet__C-balance-l1">
+                            <div data-v-7dd1adab="">₹<%=balance%>.00</div>
+                        </div>
+                        <div data-v-7dd1adab="" class="Wallet__C-balance-l2"><svg data-v-7dd1adab=""
+                                class="svg-icon icon-lottyWallet">
+                                <use xlink:href="#icon-lottyWallet"></use>
+                            </svg>
+                            <div data-v-7dd1adab="">Wallet balance</div>
+                        </div>
+                        <div data-v-7dd1adab="" class="Wallet__C-balance-l3">
+                            <div onclick="window.location.href='/main/Withdraw'" data-v-7dd1adab="">Withdraw</div>
+                            <div data-v-7dd1adab="" onclick="window.location.href='/main/recharge'">Deposit</div>
+                        </div>
+                    </div>
+                </div>
+                <div data-v-5d71c3fd="" class="noticeBar__container lottery-notice"><svg
+                        class="svg-icon icon-noticeBarSpeaker">
+                        <use xlink:href="#icon-noticeBarSpeaker"></use>
+                    </svg>
+                    <div class="noticeBar__container-body">
+                        <div class="noticeBar__container-body-text">If your deposit not receive, please send it directly
+                            to
+                            Prince Games Self-service Center (@) wait till already get
+                            process, do not send to another person and trust anyone claiming to represent Tiranga Games.
+                            Always verify our website authenticity through the official community channels. Your safety
+                            and
+                            trust is our prority.</div>
+                    </div><button class="hotIcon">Detail</button>
+                </div><!-- 游戏类型 -->
+                <!-- gameslist  -->
+                <!-- include gamelist.ejs from partials  -->
+
+                <!-- 游戏开始时间倒计时 -->
+                <div data-v-3e4c6499="" class="TimeLeft__C">
+                    <div data-v-3e4c6499="" class="TimeLeft__C-rule"><svg data-v-3e4c6499=""
+                            xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+                            <path data-v-3e4c6499=""
+                                d="M23.67 3H12.33C6.66 3 5.25 4.515 5.25 10.56V27.45C5.25 31.44 7.44 32.385 10.095 29.535L10.11 29.52C11.34 28.215 13.215 28.32 14.28 29.745L15.795 31.77C17.01 33.375 18.975 33.375 20.19 31.77L21.705 29.745C22.785 28.305 24.66 28.2 25.89 29.52C28.56 32.37 30.735 31.425 30.735 27.435V10.56C30.75 4.515 29.34 3 23.67 3ZM11.67 18C10.845 18 10.17 17.325 10.17 16.5C10.17 15.675 10.845 15 11.67 15C12.495 15 13.17 15.675 13.17 16.5C13.17 17.325 12.495 18 11.67 18ZM11.67 12C10.845 12 10.17 11.325 10.17 10.5C10.17 9.675 10.845 9 11.67 9C12.495 9 13.17 9.675 13.17 10.5C13.17 11.325 12.495 12 11.67 12ZM24.345 17.625H16.095C15.48 17.625 14.97 17.115 14.97 16.5C14.97 15.885 15.48 15.375 16.095 15.375H24.345C24.96 15.375 25.47 15.885 25.47 16.5C25.47 17.115 24.96 17.625 24.345 17.625ZM24.345 11.625H16.095C15.48 11.625 14.97 11.115 14.97 10.5C14.97 9.885 15.48 9.375 16.095 9.375H24.345C24.96 9.375 25.47 9.885 25.47 10.5C25.47 11.115 24.96 11.625 24.345 11.625Z"
+                                fill="currentColor"></path>
+                        </svg>How to play</div>
+                    <div data-v-3e4c6499="" class="TimeLeft__C-name">Win Go 30s</div>
+                    <div data-v-3e4c6499="" class="TimeLeft__C-num">
+                        <div data-v-3e4c6499="" id="firstDigitDiv" class="n0"></div>
+                        <div data-v-3e4c6499="" id="secondDigitDiv" class="n0"></div>
+                    </div>
+                    <div data-v-3e4c6499="" class="TimeLeft__C-id" id="cycleId">00000000</div>
+                    <div data-v-3e4c6499="" class="TimeLeft__C-text">Time remaining</div>
+                    <div data-v-3e4c6499="" class="TimeLeft__C-time">
+                        <div data-v-3e4c6499="">0</div>
+                        <div data-v-3e4c6499="">0</div>
+                        <div data-v-3e4c6499="">:</div>
+                        <div data-v-3e4c6499="" id="firstDigit">3</div>
+                        <div data-v-3e4c6499="" id="secondDigit">0</div>
+                    </div>
+                </div><!-- 规则弹层 begin--><!-- 规则弹层 begin--><!----><!----><!-- 投注表 -->
+                <div data-v-4aca9bd1="" data-v-5d71c3fd="" class="Betting__C" voicetype="1" typeid="30">
+                    <div data-v-4aca9bd1="" class="Betting__C-mark" style="display: none">
+                        <div data-v-4aca9bd1="">1</div>
+                        <div data-v-4aca9bd1="">9</div>
+                    </div>
+                    <div data-v-4aca9bd1="" class="Betting__C-head">
+                        <div data-v-4aca9bd1="" class="Betting__C-head-g" onclick="popupshow(this)">Green</div>
+                        <div data-v-4aca9bd1="" class="Betting__C-head-p" onclick="popupshow(this)">Violet</div>
+                        <div data-v-4aca9bd1="" class="Betting__C-head-r" onclick="popupshow(this)">Red</div>
+                    </div>
+                    <div data-v-4aca9bd1="" style="display: relative!important;" id="choose-choice"
+                        class="Betting__C-numC">
+                        <div data-v-4aca9bd1="" class="Betting__C-numC-item0"></div>
+                        <div data-v-4aca9bd1="" class="Betting__C-numC-item1"></div>
+                        <div data-v-4aca9bd1="" class="Betting__C-numC-item2"></div>
+                        <div data-v-4aca9bd1="" class="Betting__C-numC-item3"></div>
+                        <div data-v-4aca9bd1="" class="Betting__C-numC-item4"></div>
+                        <div data-v-4aca9bd1="" class="Betting__C-numC-item5"></div>
+                        <div data-v-4aca9bd1="" class="Betting__C-numC-item6"></div>
+                        <div data-v-4aca9bd1="" class="Betting__C-numC-item7"></div>
+                        <div data-v-4aca9bd1="" class="Betting__C-numC-item8"></div>
+                        <div data-v-4aca9bd1="" class="Betting__C-numC-item9"></div>
+                        <!-- Overlay timer that appears from 5 seconds to 1 second -->
+                        <div id="overlayTimer">5</div>
+                    </div>
+                    <div data-v-4aca9bd1="" class="Betting__C-multiple">
+                        <div data-v-4aca9bd1="" class="Betting__C-multiple-l">Random</div>
+                        <div data-v-4aca9bd1="" class="Betting__C-multiple-r active"> X1</div>
+                        <div data-v-4aca9bd1="" class="Betting__C-multiple-r"> X5</div>
+                        <div data-v-4aca9bd1="" class="Betting__C-multiple-r"> X10</div>
+                        <div data-v-4aca9bd1="" class="Betting__C-multiple-r"> X20</div>
+                        <div data-v-4aca9bd1="" class="Betting__C-multiple-r"> X50</div>
+                        <div data-v-4aca9bd1="" class="Betting__C-multiple-r"> X100</div>
+                    </div>
+
+                    <div data-v-4aca9bd1="" class="Betting__C-foot">
+                        <div data-v-4aca9bd1="" class="Betting__C-foot-b" onclick="popupshow(this)">Big</div>
+                        <div data-v-4aca9bd1="" class="Betting__C-foot-s" onclick="popupshow(this)">Small</div>
+                    </div><!-- Betting content begin --><!----><!----><!-- 规则弹层 begin--><!----><!---->
+                </div>
+                <!-- Dynamically display the corresponding component -->
+                <div data-v-481307ec="" data-v-5d71c3fd="" class="GameRecord__C game-record"
+                    apifun="e=&gt;f(m.WinGoGetMyEmerdList,e).then(t=&gt;t.data)"
+                    listapi="e=&gt;f(m.WinGoGetNoaverageEmerdList,e).then(t=&gt;t.data)"
+                    emerdapi="e=&gt;f(m.WinGoGetEmerdList,e).then(t=&gt;t.data)"
+                    gopathname="AllLotteryGames-BettingRecordWin">
+                    <div data-v-481307ec="" class="GameRecord__C-head">
+                        <div data-v-481307ec="" class="van-row">
+                            <div data-v-481307ec="" class="van-col van-col--8">Period</div>
+                            <div data-v-481307ec="" class="van-col van-col--5">Number</div>
+                            <div data-v-481307ec="" class="van-col van-col--5">Big Small</div>
+                            <div data-v-481307ec="" class="van-col van-col--6">Color</div>
+                        </div>
+                    </div>
+                    <div data-v-481307ec="" class="GameRecord__C-body" id="results" style="overflow-y: scroll; max-height: 300px!important;">
+                        <!-- result will be declared here  -->
+                    </div>
+                    <div data-v-3e71d3da="" data-v-5d71c3fd="" class="dialog inactive">
+                        <div data-v-3e71d3da="" class="dialog__container" role="dialog" tabindex="0">
+                            <div data-v-3e71d3da="" class="dialog__container-img"><img data-v-3e71d3da="" class=""
+                                    alt="" data-origin="/assets/png/tip-2298bb83.png"
+                                    src="images/games/tip-2298bb83.png"></div>
+                            <div data-v-3e71d3da="" class="dialog__container-title">
+                                <h1 data-v-3e71d3da=""></h1>
+                            </div>
+                            <div data-v-3e71d3da="" class="dialog__container-content">
                                 <div data-v-5d71c3fd=""></div>
-                                <div data-v-5d71c3fd="" class=""></div>
                             </div>
+                            <div data-v-3e71d3da="" class="dialog__container-footer"><button
+                                    data-v-3e71d3da="">Confirm</button><button data-v-3e71d3da="">Cancel</button></div>
+                            <!--v-if-->
                         </div>
+                        <div data-v-3e71d3da="" class="dialog__outside"></div>
                     </div>
-                </div>
-            </div><!-- 钱包余额 -->
-            <div data-v-7dd1adab="" data-v-5d71c3fd="" class="Wallet__C">
-                <div data-v-7dd1adab="" class="Wallet__C-balance">
-                    <div data-v-7dd1adab="" class="Wallet__C-balance-l1">
-                        <div data-v-7dd1adab="">₹0.00</div>
-                    </div>
-                    <div data-v-7dd1adab="" class="Wallet__C-balance-l2"><svg data-v-7dd1adab=""
-                            class="svg-icon icon-lottyWallet">
-                            <use xlink:href="#icon-lottyWallet"></use>
-                        </svg>
-                        <div data-v-7dd1adab="">Wallet balance</div>
-                    </div>
-                    <div data-v-7dd1adab="" class="Wallet__C-balance-l3">
-                        <div data-v-7dd1adab="">Withdraw</div>
-                        <div data-v-7dd1adab="">Deposit</div>
-                    </div>
-                </div>
+                </div><!--online custom service-->
             </div>
-            <div data-v-5d71c3fd="" class="noticeBar__container lottery-notice"><svg
-                    class="svg-icon icon-noticeBarSpeaker">
-                    <use xlink:href="#icon-noticeBarSpeaker"></use>
-                </svg>
-                <div class="noticeBar__container-body">
-                    <div class="noticeBar__container-body-text">If your deposit not receive, please send it directly to
-                        Prince Games Self-service Center (@) wait till already get
-                        process, do not send to another person and trust anyone claiming to represent Tiranga Games.
-                        Always verify our website authenticity through the official community channels. Your safety and
-                        trust is our prority.</div>
-                </div><button class="hotIcon">Detail</button>
-            </div><!-- 游戏类型 -->
-            <div data-v-17d56002="" data-v-5d71c3fd="" class="GameList__C">
-                <div data-v-17d56002="" class="GameList__C-item">
-                    <div data-v-17d56002="">Win Go<br>30s</div>
-                </div>
-                <div data-v-17d56002="" class="GameList__C-item">
-                    <div data-v-17d56002="">Win Go<br>1Min</div>
-                </div>
-                <div data-v-17d56002="" class="GameList__C-item">
-                    <div data-v-17d56002="">Win Go<br>3Min</div>
-                </div>
-                <div data-v-17d56002="" class="GameList__C-item">
-                    <div data-v-17d56002="">Win Go<br>5Min</div>
-                </div>
-            </div><!-- 游戏开始时间倒计时 -->
-            <div data-v-3e4c6499="" class="TimeLeft__C">
-                <div data-v-3e4c6499="" class="TimeLeft__C-rule"><svg data-v-3e4c6499=""
-                        xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
-                        <path data-v-3e4c6499=""
-                            d="M23.67 3H12.33C6.66 3 5.25 4.515 5.25 10.56V27.45C5.25 31.44 7.44 32.385 10.095 29.535L10.11 29.52C11.34 28.215 13.215 28.32 14.28 29.745L15.795 31.77C17.01 33.375 18.975 33.375 20.19 31.77L21.705 29.745C22.785 28.305 24.66 28.2 25.89 29.52C28.56 32.37 30.735 31.425 30.735 27.435V10.56C30.75 4.515 29.34 3 23.67 3ZM11.67 18C10.845 18 10.17 17.325 10.17 16.5C10.17 15.675 10.845 15 11.67 15C12.495 15 13.17 15.675 13.17 16.5C13.17 17.325 12.495 18 11.67 18ZM11.67 12C10.845 12 10.17 11.325 10.17 10.5C10.17 9.675 10.845 9 11.67 9C12.495 9 13.17 9.675 13.17 10.5C13.17 11.325 12.495 12 11.67 12ZM24.345 17.625H16.095C15.48 17.625 14.97 17.115 14.97 16.5C14.97 15.885 15.48 15.375 16.095 15.375H24.345C24.96 15.375 25.47 15.885 25.47 16.5C25.47 17.115 24.96 17.625 24.345 17.625ZM24.345 11.625H16.095C15.48 11.625 14.97 11.115 14.97 10.5C14.97 9.885 15.48 9.375 16.095 9.375H24.345C24.96 9.375 25.47 9.885 25.47 10.5C25.47 11.115 24.96 11.625 24.345 11.625Z"
-                            fill="currentColor"></path>
-                    </svg>How to play</div>
-                <div data-v-3e4c6499="" class="TimeLeft__C-name">Win Go 30s</div>
-                <div data-v-3e4c6499="" class="TimeLeft__C-num">
-                    <div data-v-3e4c6499="" id="firstDigitDiv" class="n0"></div>
-                    <div data-v-3e4c6499="" id="secondDigitDiv" class="n0"></div>
-                </div>
-                <div data-v-3e4c6499="" class="TimeLeft__C-id" id="cycleId">00000000</div>
-                <div data-v-3e4c6499="" class="TimeLeft__C-text">Time remaining</div>
-                <div data-v-3e4c6499="" class="TimeLeft__C-time">
-                    <div data-v-3e4c6499="">0</div>
-                    <div data-v-3e4c6499="">0</div>
-                    <div data-v-3e4c6499="">:</div>
-                    <div data-v-3e4c6499="" id="firstDigit">3</div>
-                    <div data-v-3e4c6499="" id="secondDigit">0</div>
-                </div>
-            </div><!-- 规则弹层 begin--><!-- 规则弹层 begin--><!----><!----><!-- 投注表 -->
-            <div data-v-4aca9bd1="" data-v-5d71c3fd="" class="Betting__C" voicetype="1" typeid="30">
-                <div data-v-4aca9bd1="" class="Betting__C-mark" style="display: none;">
-                    <div data-v-4aca9bd1="">1</div>
-                    <div data-v-4aca9bd1="">9</div>
-                </div>
-                <div data-v-4aca9bd1="" class="Betting__C-head">
-                    <div data-v-4aca9bd1="" class="Betting__C-head-g">Green</div>
-                    <div data-v-4aca9bd1="" class="Betting__C-head-p">Violet</div>
-                    <div data-v-4aca9bd1="" class="Betting__C-head-r">Red</div>
-                </div>
-                <div data-v-4aca9bd1="" style="display: relative!important;" id="choose-choice" class="Betting__C-numC">
-                    <div data-v-4aca9bd1="" class="Betting__C-numC-item0"></div>
-                    <div data-v-4aca9bd1="" class="Betting__C-numC-item1"></div>
-                    <div data-v-4aca9bd1="" class="Betting__C-numC-item2"></div>
-                    <div data-v-4aca9bd1="" class="Betting__C-numC-item3"></div>
-                    <div data-v-4aca9bd1="" class="Betting__C-numC-item4"></div>
-                    <div data-v-4aca9bd1="" class="Betting__C-numC-item5"></div>
-                    <div data-v-4aca9bd1="" class="Betting__C-numC-item6"></div>
-                    <div data-v-4aca9bd1="" class="Betting__C-numC-item7"></div>
-                    <div data-v-4aca9bd1="" class="Betting__C-numC-item8"></div>
-                    <div data-v-4aca9bd1="" class="Betting__C-numC-item9"></div>
-                    <!-- Overlay timer that appears from 5 seconds to 1 second -->
-                    <div id="overlayTimer">5</div>
-                </div>
-                <div data-v-4aca9bd1="" class="Betting__C-multiple">
-                    <div data-v-4aca9bd1="" class="Betting__C-multiple-l">Random</div>
-                    <div data-v-4aca9bd1="" class="Betting__C-multiple-r active"> X1</div>
-                    <div data-v-4aca9bd1="" class="Betting__C-multiple-r"> X5</div>
-                    <div data-v-4aca9bd1="" class="Betting__C-multiple-r"> X10</div>
-                    <div data-v-4aca9bd1="" class="Betting__C-multiple-r"> X20</div>
-                    <div data-v-4aca9bd1="" class="Betting__C-multiple-r"> X50</div>
-                    <div data-v-4aca9bd1="" class="Betting__C-multiple-r"> X100</div>
-                </div>
-                <div data-v-4aca9bd1="" class="Betting__C-foot">
-                    <div data-v-4aca9bd1="" class="Betting__C-foot-b">Big</div>
-                    <div data-v-4aca9bd1="" class="Betting__C-foot-s">Small</div>
-                </div><!-- 投注内容 begin --><!----><!----><!-- 规则弹层 begin--><!----><!---->
-            </div><!-- 记录导航 -->
-            <div data-v-72f81e71="" data-v-5d71c3fd="" class="RecordNav__C">
-                <div data-v-72f81e71="" class="active">Game history</div>
-                <div data-v-72f81e71="" class="">Chart</div>
-                <div data-v-72f81e71="" class="">My history</div>
-            </div><!-- 动态展示对应的组件 -->
-            <div data-v-481307ec="" data-v-5d71c3fd="" class="GameRecord__C game-record"
-                apifun="e=&gt;f(m.WinGoGetMyEmerdList,e).then(t=&gt;t.data)"
-                listapi="e=&gt;f(m.WinGoGetNoaverageEmerdList,e).then(t=&gt;t.data)"
-                emerdapi="e=&gt;f(m.WinGoGetEmerdList,e).then(t=&gt;t.data)"
-                gopathname="AllLotteryGames-BettingRecordWin">
-                <div data-v-481307ec="" class="GameRecord__C-head">
-                    <div data-v-481307ec="" class="van-row">
-                        <div data-v-481307ec="" class="van-col van-col--8">Period</div>
-                        <div data-v-481307ec="" class="van-col van-col--5">Number</div>
-                        <div data-v-481307ec="" class="van-col van-col--5">Big Small</div>
-                        <div data-v-481307ec="" class="van-col van-col--6">Color</div>
-                    </div>
-                </div>
-                <div data-v-481307ec="" class="GameRecord__C-body">
-                    <div data-v-481307ec="" class="van-row">
-                        <div data-v-481307ec="" class="van-col van-col--8">20240920301132</div>
-                        <div data-v-481307ec="" class="van-col van-col--5 numcenter">
-                            <div data-v-481307ec="" class="GameRecord__C-body-num mixedColor5">5</div>
-                        </div>
-                        <div data-v-481307ec="" class="van-col van-col--5"><span data-v-481307ec="">Big</span></div>
-                        <div data-v-481307ec="" class="van-col van-col--6">
-                            <div data-v-481307ec="" class="GameRecord__C-origin"><!--v-if--><!--v-if--><!--v-if-->
-                                <div data-v-481307ec="" class="GameRecord__C-origin-I green"></div>
-                                <div data-v-481307ec="" class="GameRecord__C-origin-I violet"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div data-v-481307ec="" class="van-row">
-                        <div data-v-481307ec="" class="van-col van-col--8">20240920301131</div>
-                        <div data-v-481307ec="" class="van-col van-col--5 numcenter">
-                            <div data-v-481307ec="" class="GameRecord__C-body-num mixedColor0">0</div>
-                        </div>
-                        <div data-v-481307ec="" class="van-col van-col--5"><span data-v-481307ec="">Small</span></div>
-                        <div data-v-481307ec="" class="van-col van-col--6">
-                            <div data-v-481307ec="" class="GameRecord__C-origin">
-                                <div data-v-481307ec="" class="GameRecord__C-origin-I red"></div>
-                                <div data-v-481307ec="" class="GameRecord__C-origin-I violet"></div>
-                                <!--v-if--><!--v-if--><!--v-if-->
-                            </div>
-                        </div>
-                    </div>
-                    <div data-v-481307ec="" class="van-row">
-                        <div data-v-481307ec="" class="van-col van-col--8">20240920301130</div>
-                        <div data-v-481307ec="" class="van-col van-col--5 numcenter">
-                            <div data-v-481307ec="" class="GameRecord__C-body-num greenColor">7</div>
-                        </div>
-                        <div data-v-481307ec="" class="van-col van-col--5"><span data-v-481307ec="">Big</span></div>
-                        <div data-v-481307ec="" class="van-col van-col--6">
-                            <div data-v-481307ec="" class="GameRecord__C-origin"><!--v-if-->
-                                <div data-v-481307ec="" class="GameRecord__C-origin-I green"></div>
-                                <!--v-if--><!--v-if-->
-                            </div>
-                        </div>
-                    </div>
-                    <div data-v-481307ec="" class="van-row">
-                        <div data-v-481307ec="" class="van-col van-col--8">20240920301129</div>
-                        <div data-v-481307ec="" class="van-col van-col--5 numcenter">
-                            <div data-v-481307ec="" class="GameRecord__C-body-num mixedColor0">0</div>
-                        </div>
-                        <div data-v-481307ec="" class="van-col van-col--5"><span data-v-481307ec="">Small</span></div>
-                        <div data-v-481307ec="" class="van-col van-col--6">
-                            <div data-v-481307ec="" class="GameRecord__C-origin">
-                                <div data-v-481307ec="" class="GameRecord__C-origin-I red"></div>
-                                <div data-v-481307ec="" class="GameRecord__C-origin-I violet"></div>
-                                <!--v-if--><!--v-if--><!--v-if-->
-                            </div>
-                        </div>
-                    </div>
-                    <div data-v-481307ec="" class="van-row">
-                        <div data-v-481307ec="" class="van-col van-col--8">20240920301128</div>
-                        <div data-v-481307ec="" class="van-col van-col--5 numcenter">
-                            <div data-v-481307ec="" class="GameRecord__C-body-num greenColor">3</div>
-                        </div>
-                        <div data-v-481307ec="" class="van-col van-col--5"><span data-v-481307ec="">Small</span></div>
-                        <div data-v-481307ec="" class="van-col van-col--6">
-                            <div data-v-481307ec="" class="GameRecord__C-origin"><!--v-if-->
-                                <div data-v-481307ec="" class="GameRecord__C-origin-I green"></div>
-                                <!--v-if--><!--v-if-->
-                            </div>
-                        </div>
-                    </div>
-                    <div data-v-481307ec="" class="van-row">
-                        <div data-v-481307ec="" class="van-col van-col--8">20240920301127</div>
-                        <div data-v-481307ec="" class="van-col van-col--5 numcenter">
-                            <div data-v-481307ec="" class="GameRecord__C-body-num greenColor">1</div>
-                        </div>
-                        <div data-v-481307ec="" class="van-col van-col--5"><span data-v-481307ec="">Small</span></div>
-                        <div data-v-481307ec="" class="van-col van-col--6">
-                            <div data-v-481307ec="" class="GameRecord__C-origin"><!--v-if-->
-                                <div data-v-481307ec="" class="GameRecord__C-origin-I green"></div>
-                                <!--v-if--><!--v-if-->
-                            </div>
-                        </div>
-                    </div>
-                    <div data-v-481307ec="" class="van-row">
-                        <div data-v-481307ec="" class="van-col van-col--8">20240920301126</div>
-                        <div data-v-481307ec="" class="van-col van-col--5 numcenter">
-                            <div data-v-481307ec="" class="GameRecord__C-body-num greenColor">1</div>
-                        </div>
-                        <div data-v-481307ec="" class="van-col van-col--5"><span data-v-481307ec="">Small</span></div>
-                        <div data-v-481307ec="" class="van-col van-col--6">
-                            <div data-v-481307ec="" class="GameRecord__C-origin"><!--v-if-->
-                                <div data-v-481307ec="" class="GameRecord__C-origin-I green"></div>
-                                <!--v-if--><!--v-if-->
-                            </div>
-                        </div>
-                    </div>
-                    <div data-v-481307ec="" class="van-row">
-                        <div data-v-481307ec="" class="van-col van-col--8">20240920301125</div>
-                        <div data-v-481307ec="" class="van-col van-col--5 numcenter">
-                            <div data-v-481307ec="" class="GameRecord__C-body-num mixedColor0">0</div>
-                        </div>
-                        <div data-v-481307ec="" class="van-col van-col--5"><span data-v-481307ec="">Small</span></div>
-                        <div data-v-481307ec="" class="van-col van-col--6">
-                            <div data-v-481307ec="" class="GameRecord__C-origin">
-                                <div data-v-481307ec="" class="GameRecord__C-origin-I red"></div>
-                                <div data-v-481307ec="" class="GameRecord__C-origin-I violet"></div>
-                                <!--v-if--><!--v-if--><!--v-if-->
-                            </div>
-                        </div>
-                    </div>
-                    <div data-v-481307ec="" class="van-row">
-                        <div data-v-481307ec="" class="van-col van-col--8">20240920301124</div>
-                        <div data-v-481307ec="" class="van-col van-col--5 numcenter">
-                            <div data-v-481307ec="" class="GameRecord__C-body-num greenColor">1</div>
-                        </div>
-                        <div data-v-481307ec="" class="van-col van-col--5"><span data-v-481307ec="">Small</span></div>
-                        <div data-v-481307ec="" class="van-col van-col--6">
-                            <div data-v-481307ec="" class="GameRecord__C-origin"><!--v-if-->
-                                <div data-v-481307ec="" class="GameRecord__C-origin-I green"></div>
-                                <!--v-if--><!--v-if-->
-                            </div>
-                        </div>
-                    </div>
-                    <div data-v-481307ec="" class="van-row">
-                        <div data-v-481307ec="" class="van-col van-col--8">20240920301123</div>
-                        <div data-v-481307ec="" class="van-col van-col--5 numcenter">
-                            <div data-v-481307ec="" class="GameRecord__C-body-num defaultColor">4</div>
-                        </div>
-                        <div data-v-481307ec="" class="van-col van-col--5"><span data-v-481307ec="">Small</span></div>
-                        <div data-v-481307ec="" class="van-col van-col--6">
-                            <div data-v-481307ec="" class="GameRecord__C-origin"><!--v-if--><!--v-if-->
-                                <div data-v-481307ec="" class="GameRecord__C-origin-I red"></div><!--v-if-->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div data-v-3e71d3da="" data-v-5d71c3fd="" class="dialog inactive">
-                    <div data-v-3e71d3da="" class="dialog__container" role="dialog" tabindex="0">
-                        <div data-v-3e71d3da="" class="dialog__container-img"><img data-v-3e71d3da="" class="" alt=""
-                                data-origin="/assets/png/tip-2298bb83.png" src="images/games/tip-2298bb83.png"></div>
-                        <div data-v-3e71d3da="" class="dialog__container-title">
-                            <h1 data-v-3e71d3da=""></h1>
-                        </div>
-                        <div data-v-3e71d3da="" class="dialog__container-content">
-                            <div data-v-5d71c3fd=""></div>
-                        </div>
-                        <div data-v-3e71d3da="" class="dialog__container-footer"><button
-                                data-v-3e71d3da="">Confirm</button><button data-v-3e71d3da="">Cancel</button></div>
-                        <!--v-if-->
-                    </div>
-                    <div data-v-3e71d3da="" class="dialog__outside"></div>
-                </div><!-- 中奖提示组件 -->
-                <div data-v-e44179e3="" data-v-5d71c3fd="" class="WinningTip__C" style="display: none;">
-                    <div data-v-e44179e3="" class="WinningTip__C-body">
-                        <div data-v-e44179e3="" class="WinningTip__C-body-l1">Congratulations</div>
-                        <div data-v-e44179e3="" class="WinningTip__C-body-l2 typeundefined">Lottery results <div
-                                data-v-e44179e3=""></div>
-                            <div data-v-e44179e3="" class="WinningNum"></div>
-                            <div data-v-e44179e3="">Small</div>
-                        </div>
-                        <div data-v-e44179e3="" class="WinningTip__C-body-l3">
-                            <div data-v-e44179e3="" class="head">Bonus</div>
-                            <div data-v-e44179e3="" class="bonus"></div>
-                            <div data-v-e44179e3="" class="gameDetail">Period: </div>
-                        </div>
-                        <div data-v-e44179e3="" class="WinningTip__C-body-l4">
-                            <div data-v-e44179e3="" class="acitveBtn"></div> 3 seconds auto close
-                        </div>
-                        <div data-v-e44179e3="" class="closeBtn"></div><i data-v-e44179e3=""
-                            class="van-badge__wrapper van-icon van-icon-arrow arrowBtn"
-                            style="color: rgb(255, 255, 255); font-size: 30px; display: none;"><!----><!----><!----></i>
-                    </div>
-                </div>
-            </div><!--online custom service-->
-            <div class="customer" id="customerId"
-                style="--f13b4d11-currentFontFamily: Roboto, Inter, sans-serif; --f6a705e1-currentFontFamily: bahnschrift;">
-                <img class="" data-origin="/assets/png/icon_sevice-8a1f5628.png"
-                    src="https://mumbai-big.com/assets/png/icon_sevice-af9dd176.png">
-            </div>
-        </div>
+            <!-- dialog for choose  -->
+            <%-include("../partials/popup-choose.ejs")%>
+                <!-- end  -->
+                <script>
+                    const bettingItems = document.querySelectorAll('.Betting__C-multiple-r');
 
+                    bettingItems.forEach(item => {
+                        item.addEventListener('click', () => {
+                            // Remove active class from all items
+                            bettingItems.forEach(i => i.classList.remove('active'));
+                            // Add active class to the clicked item
+                            item.classList.add('active');
+                        });
+                    });
 
+                </script>
 </body>
 
 </html>

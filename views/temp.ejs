@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results</title>
+</head>
+<body>
+    <h1>Game Results</h1>
+    <div id="results"></div>
+
+    <script>
+        const resultsDiv = document.getElementById('results');
+        const ws = new WebSocket('ws://localhost:8080'); // Adjust the port if necessary
+    
+        ws.onmessage = (event) => {
+            const results = JSON.parse(event.data);
+            displayResults(results); // Call the function to display recent results
+        };
+    
+        function displayResults(results) {
+            // Ensure results is an array
+            if (!Array.isArray(results)) {
+                console.error('Expected results to be an array, but received:', results);
+                return;
+            }
+    
+            resultsDiv.innerHTML = ''; // Clear previous results
+            results.forEach(result => {
+                const resultElement = document.createElement('div');
+                resultElement.innerHTML = `
+                    <p>Big/Small Result: ${result.bigSmallResult}</p>
+                    <p>Number Result: ${result.numberResult}</p>
+                    <p>Color Result: ${result.colorResult}</p>
+                    <p>Cycle ID: ${result.currCycleId}</p>
+                    <p>Date: ${new Date(result.date).toLocaleString()}</p>
+                    <hr>
+                `;
+                resultsDiv.appendChild(resultElement); // Append each result to the resultsDiv
+            });
+        }
+    </script>
+    
+    
+</body>
+</html>

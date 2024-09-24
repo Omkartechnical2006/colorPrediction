@@ -80,7 +80,7 @@
                         class="svg-icon icon-wallet1">
                         <use xlink:href="#icon-wallet1"></use>
                     </svg>
-                    <div data-v-0dabd3fc="">₹28.00</div><span data-v-0dabd3fc="">Total balance</span>
+                    <div data-v-0dabd3fc="">₹<%=balance%>.00</div><span data-v-0dabd3fc="">Total balance</span>
                     <div data-v-0dabd3fc="">
                         <div data-v-0dabd3fc="">
                             <p data-v-0dabd3fc="" class="total">0</p>
@@ -108,7 +108,7 @@
                                 </svg>
                                 <div class="van-circle__text">100%</div>
                             </div>
-                            <h3 data-v-0dabd3fc="">₹28.00</h3><span data-v-0dabd3fc="">Main wallet</span>
+                            <h3 data-v-0dabd3fc="">₹<%=balance%>.00</h3><span data-v-0dabd3fc="">Main wallet</span>
                         </div>
                         <div data-v-0dabd3fc="" class="progressBarsR">
                             <div data-v-0dabd3fc="" class="van-circle"><svg viewBox="0 0 1100 1100"><!---->
@@ -128,27 +128,27 @@
                     <div data-v-0dabd3fc="" class="recycleBtnD"><button data-v-0dabd3fc="" class="recycleBtn">Main
                             wallet transfer</button></div>
                     <div data-v-0dabd3fc="" class="userDetail">
-                        <div data-v-0dabd3fc="">
+                        <div onclick="window.location.href='/main/recharge'" data-v-0dabd3fc="">
                             <div data-v-0dabd3fc="" class="imgD"><img data-v-0dabd3fc=""
                                     src="images/wallet/rechargeIcon-e515aee4.png"></div><span
                                 data-v-0dabd3fc="">Deposit</span>
                         </div>
                         <div data-v-0dabd3fc="">
                             <!-- withdraw  -->
-                            <div data-v-0dabd3fc="" class="imgD"><img data-v-0dabd3fc=""
+                            <div onclick="window.location.href='/main/withdraw'" data-v-0dabd3fc="" class="imgD"><img data-v-0dabd3fc=""
                                     src="images/wallet/widthdrawBlue-80197e64.png"></div><span
                                 data-v-0dabd3fc="">Withdraw</span>
                         </div>
 
                         <!-- deposit -->
                         <div data-v-0dabd3fc="">
-                            <div data-v-0dabd3fc="" class="imgD"><img data-v-0dabd3fc=""
+                            <div onclick="window.location.href='main/deposit-history'" data-v-0dabd3fc="" class="imgD"><img data-v-0dabd3fc=""
                                     src="images/wallet/rechargeHistory-b5a853c0.png"></div><span
                                 data-v-0dabd3fc="">Deposit history</span>
                         </div>
                         <!-- withdrawl history  -->
                         <div data-v-0dabd3fc="">
-                            <div data-v-0dabd3fc="" class="imgD"><img data-v-0dabd3fc=""
+                            <div onclick="window.location.href='main/withdraw-history'" data-v-0dabd3fc="" class="imgD"><img data-v-0dabd3fc=""
                                     src="images/wallet/withdrawHistory-fb2bafcf.png"></div><span
                                 data-v-0dabd3fc="">Withdrawal history</span>
                         </div>

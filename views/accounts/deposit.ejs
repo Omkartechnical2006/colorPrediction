@@ -475,48 +475,28 @@
 							src="images/accounts/1-a6662edb.png" class="userAvatar"></div>
 					<div data-v-5bd44e74="" class="userInfo__container-content__name">
 						<div data-v-5bd44e74="" class="userInfo__container-content-nickname">
-							<h3 data-v-5bd44e74="">MEMBERNNG0XPJM</h3>
+							<h3 data-v-5bd44e74="" style="text-transform: uppercase;">
+								<%=username%>
+							</h3>
 							<div data-v-5bd44e74="" class="n0"></div><img data-v-5bd44e74="" class="editPencil"
 								src="images/accounts/editPencil-c89ee923.png" style="display: none;">
 						</div>
 						<div data-v-5bd44e74="" class="userInfo__container-content-uid"><span
-								data-v-5bd44e74="">UID</span><span data-v-5bd44e74="">|</span><span
-								data-v-5bd44e74="">4730582</span><svg data-v-5bd44e74="" class="svg-icon icon-copy">
+								data-v-5bd44e74="">UID</span><span data-v-5bd44e74="">|</span><span data-v-5bd44e74="">
+								<%=uid%>
+							</span><svg data-v-5bd44e74="" class="svg-icon icon-copy">
 								<use xlink:href="#icon-copy"></use>
 							</svg></div>
 						<div data-v-5bd44e74="" class="userInfo__container-content-logintime"><span
-								data-v-5bd44e74="">Last login:&nbsp;</span><span data-v-5bd44e74="">2024-09-19
-								21:08:16</span></div>
+								data-v-5bd44e74="">Last login:&nbsp;</span><span data-v-5bd44e74="">
+								<%=lastLoginDate%>
+							</span></div>
 						<div data-v-5bd44e74="" class="userInfo__container-content-logintime" style="display: none;">
 							<span data-v-5bd44e74="">&nbsp;</span>
 						</div>
 					</div>
 				</div>
 
-			</div>
-			<div data-v-5bd44e74="" class="userInfo__container-setting-center" style="display: none;">
-				<div data-v-5bd44e74="" class="userInfo__container-setting-center-header">
-					<div data-v-5bd44e74="" class="userInfo__container-content__avatar"><img data-v-5bd44e74=""
-							data-img="/assets/png/avatar-2f23f3bd.png" class="ar-lazyload"
-							data-origin="/assets/png/1-a6662edb.png"></div>
-					<div data-v-5bd44e74="" class="userInfo__container-setting-center-header-edit"><span
-							data-v-5bd44e74="">Change avatar</span><i data-v-5bd44e74=""
-							class="van-badge__wrapper van-icon van-icon-arrow"
-							style="color: rgb(136, 136, 136);"><!----><!----><!----></i></div>
-				</div>
-				<div data-v-5bd44e74="" class="userInfo__container-setting-center-content ar-1px-b">
-					<h5 data-v-5bd44e74="">Nickname</h5>
-					<div data-v-5bd44e74=""><span data-v-5bd44e74="">MemberNNG0XPJM</span><i data-v-5bd44e74=""
-							class="van-badge__wrapper van-icon van-icon-arrow"
-							style="color: rgb(136, 136, 136);"><!----><!----><!----></i></div>
-				</div>
-				<div data-v-5bd44e74="" class="userInfo__container-setting-center-content">
-					<h5 data-v-5bd44e74="">UID</h5>
-					<div data-v-5bd44e74=""><span data-v-5bd44e74="">4730582</span><svg data-v-5bd44e74=""
-							class="svg-icon icon-copy">
-							<use xlink:href="#icon-copy"></use>
-						</svg></div>
-				</div>
 			</div>
 			<div data-v-2c18a1cc="" data-v-5bd44e74="" class="info-dialog"><!----><!----></div>
 		</div>
@@ -529,7 +509,7 @@
 								data-v-7d799898="">Total
 								balance</span><!-- <img v-lazy="getIcons('main', 'balanceIcon')" alt="" /> --></div>
 						<p data-v-7d799898="" class="totalSavings__container-header__subtitle"><span
-								data-v-7d799898="">₹28.00</span><svg data-v-7d799898=""
+								data-v-7d799898="">₹<%= balance %>.00</span><svg data-v-7d799898=""
 								class="svg-icon icon-refreshBalance">
 								<use xlink:href="#icon-refreshBalance"></use>
 							</svg></p>
@@ -541,12 +521,14 @@
 								<use xlink:href="#icon-wallets"></use>
 							</svg><span data-v-7d799898="">ARWallet</span></div>
 					</div>
-					<div data-v-7d799898="" onclick="location.href='main/recharge'" class="totalSavings__container-content-item">
+					<div data-v-7d799898="" onclick="location.href='main/recharge'"
+						class="totalSavings__container-content-item">
 						<div data-v-7d799898=""><svg data-v-7d799898="" class="svg-icon icon-rechargeIcon">
 								<use xlink:href="#icon-rechargeIcon"></use>
 							</svg><span data-v-7d799898="">Deposit</span></div>
 					</div>
-					<div data-v-7d799898="" class="totalSavings__container-content-item">
+					<div data-v-7d799898="" onclick="window.location.href='/main/withdraw'"
+						class="totalSavings__container-content-item">
 						<div data-v-7d799898=""><svg data-v-7d799898="" class="svg-icon icon-widthdrawBlue">
 								<use xlink:href="#icon-widthdrawBlue"></use>
 							</svg><span data-v-7d799898="">Withdraw</span></div>
@@ -560,7 +542,7 @@
 			</div><!-- Safe Points Mall Betting-Transaction-Recharge-Withdrawal -->
 			<div data-v-acd6d46f="" data-v-a78765c7="" class="financialServices__container">
 				<!--v-if--><!-- Bet-Trade-Recharge-Withdraw-->
-				<div data-v-acd6d46f="" class="financialServices__container-box">
+				<div onclick="window.location.href='/main/game-history'" data-v-acd6d46f="" class="financialServices__container-box">
 					<div data-v-acd6d46f=""><svg data-v-acd6d46f="" class="svg-icon icon-betHistory">
 							<use xlink:href="#icon-betHistory"></use>
 						</svg>
@@ -568,7 +550,7 @@
 							<h3 data-v-acd6d46f="">Game History</h3><span data-v-acd6d46f="">My game history</span>
 						</div>
 					</div>
-					<div data-v-acd6d46f=""><svg data-v-acd6d46f="" class="svg-icon icon-tradeHistory">
+					<div data-v-acd6d46f="" onclick="window.location.href='/main/transaction-history'"><svg data-v-acd6d46f="" class="svg-icon icon-tradeHistory">
 							<use xlink:href="#icon-tradeHistory"></use>
 						</svg>
 						<div data-v-acd6d46f="" class="financialServices__container-box-para">
@@ -579,17 +561,22 @@
 					<div data-v-acd6d46f=""><svg data-v-acd6d46f="" class="svg-icon icon-rechargeHistory">
 							<use xlink:href="#icon-rechargeHistory"></use>
 						</svg>
-						<div data-v-acd6d46f="" class="financialServices__container-box-para">
-							<h3 data-v-acd6d46f="">Deposit</h3><span data-v-acd6d46f="">My deposit history</span>
+						<div onclick="window.location.href='/main/deposit-history';"
+							class="financialServices__container-box-para">
+							<h3>Deposit</h3><span>My deposit history</span>
 						</div>
+
 					</div>
-					<div data-v-acd6d46f=""><svg data-v-acd6d46f="" class="svg-icon icon-myWithdrawHistory">
+					<div data-v-acd6d46f="" onclick="window.location.href='/main/withdraw-history'">
+						<svg data-v-acd6d46f="" class="svg-icon icon-myWithdrawHistory">
 							<use xlink:href="#icon-myWithdrawHistory"></use>
 						</svg>
 						<div data-v-acd6d46f="" class="financialServices__container-box-para">
-							<h3 data-v-acd6d46f="">Withdraw</h3><span data-v-acd6d46f="">My withdraw history</span>
+							<h3 data-v-acd6d46f="">Withdraw</h3>
+							<span data-v-acd6d46f="">My withdraw history</span>
 						</div>
 					</div>
+					
 				</div>
 			</div><!-- 通知 邀请奖励 礼物兑换 商品订单 游戏统计 语言变更 -->
 			<div data-v-a30d19b1="" data-v-a78765c7="" class="settingPanel__container">
@@ -751,7 +738,7 @@
 				src="images/accounts/icon_sevice-af9dd176.png">
 		</div>
 		<!-- footer  -->
-		 <%-include("../partials/footer.ejs")%>
+		<%-include("../partials/footer.ejs")%>
 	</div>
 	</div>
 </body>

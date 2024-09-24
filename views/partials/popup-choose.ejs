@@ -1,0 +1,190 @@
+<div role="dialog" style="width: 95vw;margin-left: 10px;z-index: 2010;" id="popuptoproceed" tabindex="0"
+    class="van-popup van-popup--round van-popup--bottom" data-v-7f36fe93="">
+    <div data-v-7f36fe93="" class="Betting__Popup-13">
+        <div data-v-7f36fe93="" class="Betting__Popup-head">
+            <div data-v-7f36fe93="" class="Betting__Popup-head-title">Win Go 30s</div>
+            <div data-v-7f36fe93="" class="Betting__Popup-head-selectName"><span data-v-7f36fe93="">Select</span><span
+                    data-v-7f36fe93="" id="chosed-data"></span></div>
+        </div>
+        <div data-v-7f36fe93="" class=" Betting__Popup-body">
+            <div data-v-7f36fe93="" class="Betting__Popup-body-line">Balance <div data-v-7f36fe93=""
+                    class="Betting__Popup-body-line-list">
+                    <div data-v-7f36fe93="" class="Betting__Popup-body-line-item bgcolor balance-btn" data-value="1"">1</div>
+                            <div data-v-7f36fe93="" class=" Betting__Popup-body-line-item balance-btn" data-value="10">
+                        10</div>
+                    <div data-v-7f36fe93="" class="Betting__Popup-body-line-item balance-btn" data-value="100">
+                        100</div>
+                    <div data-v-7f36fe93="" class="Betting__Popup-body-line-item balance-btn" data-value="1000">
+                        1000
+                    </div>
+                </div>
+            </div>
+            <div data-v-7f36fe93="" class="Betting__Popup-body-line">Quantity <div data-v-7f36fe93=""
+                    class="Betting__Popup-body-line-btnL">
+                    <div data-v-7f36fe93="" class="Betting__Popup-btn bgcolor" id="decrease-quantity">-</div>
+                    <div data-v-7f36fe93="" class="van-cell van-field Betting__Popup-input"><!----><!---->
+                        <div class="van-cell__value van-field__value">
+                            <div class="van-field__body"><input type="tel" inputmode="numeric" id="quantity" value="1"
+                                    class="van-field__control" readonly><!----><!----><!---->
+                            </div><!----><!---->
+                        </div><!----><!---->
+                    </div>
+                    <div data-v-7f36fe93="" class="Betting__Popup-btn bgcolor" id="increase-quantity">+</div>
+                </div>
+            </div>
+            <div data-v-7f36fe93="" class="Betting__Popup-body-line">
+                <div data-v-7f36fe93=""></div>
+                <div data-v-7f36fe93="" class="Betting__Popup-body-line-list">
+                    <div data-v-7f36fe93="" class="Betting__Popup-body-line-item bgcolor multiplier-btn"
+                        data-multiplier="1"> X1</div>
+                    <div data-v-7f36fe93="" class="Betting__Popup-body-line-item multiplier-btn" data-multiplier="5"> X5
+                    </div>
+                    <div data-v-7f36fe93="" class="Betting__Popup-body-line-item multiplier-btn" data-multiplier="10">
+                        X10</div>
+                    <div data-v-7f36fe93="" class="Betting__Popup-body-line-item multiplier-btn" data-multiplier="20">
+                        X20</div>
+                    <div data-v-7f36fe93="" class="Betting__Popup-body-line-item multiplier-btn" data-multiplier="50">
+                        X50</div>
+                    <div data-v-7f36fe93="" class="Betting__Popup-body-line-item multiplier-btn" data-multiplier="100">
+                        X100</div>
+                </div>
+            </div>
+            <div data-v-7f36fe93="" class="Betting__Popup-body-line"><span data-v-7f36fe93=""
+                    class="Betting__Popup-agree active">I agree</span><span data-v-7f36fe93=""
+                    class="Betting__Popup-preSaleShow">《Pre-sale rules》</span></div>
+        </div>
+        <div data-v-7f36fe93="" class="Betting__Popup-foot">
+            <div data-v-7f36fe93="" id="cancelpopup" class="Betting__Popup-foot-c">Cancel
+            </div>
+            <div data-v-7f36fe93="" class="Betting__Popup-foot-s bgcolor">Total amount ₹<span
+                    id="total-amount">1.00</span></div>
+        </div>
+    </div>
+    <!-- Hidden form -->
+<form id="betForm" action="/wingo/bet" method="POST" style="display: none;">
+    <input type="hidden" id="betAmountInput" name="betAmount" value="">
+    <input type="hidden" id="choosedBetInput" name="choosedBet" value="">
+</form>
+</div>
+<script>
+    let popuptoproceed = document.getElementById("popuptoproceed");
+    let choosedData = document.getElementById("chosed-data");
+    popuptoproceed.style.display = "none";
+    // Initialize variables
+    let quantity = 1;
+    let balance = 1; // Default balance
+    let multiplier = 1; // Default multiplier
+    document.getElementById("cancelpopup").addEventListener("click", (req, res) => {
+        popuptoproceed.style.display = 'none';
+    });
+
+    // Update the total amount
+    function updateTotalAmount() {
+        const total = quantity * balance * multiplier;
+        document.getElementById("total-amount").textContent = total.toFixed(2); // Display with 2 decimal points
+    }
+
+    // Handle quantity increment and decrement
+    document.getElementById("decrease-quantity").addEventListener("click", function () {
+        if (quantity > 1) { // Prevent going below 1
+            quantity--;
+            document.getElementById("quantity").value = quantity;
+            updateTotalAmount();
+        }
+    });
+
+    document.getElementById("increase-quantity").addEventListener("click", function () {
+        quantity++;
+        document.getElementById("quantity").value = quantity;
+        updateTotalAmount();
+    });
+
+    // Handle balance button clicks
+    const balanceButtons = document.querySelectorAll(".balance-btn");
+    balanceButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            balance = parseInt(this.getAttribute("data-value"));
+            updateTotalAmount();
+        });
+    });
+
+    // Handle multiplier button clicks
+    const multiplierButtons = document.querySelectorAll(".multiplier-btn");
+    multiplierButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            multiplier = parseInt(this.getAttribute("data-multiplier"));
+            updateTotalAmount();
+        });
+    });
+
+    // Initial update for total amount
+    updateTotalAmount();
+    // Select all multiplier buttons
+
+    // Add click event listener to each button
+    multiplierButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            // Remove the 'bgcolor' class from all buttons
+            multiplierButtons.forEach(btn => btn.classList.remove("bgcolor"));
+            // Add the 'bgcolor' class to the clicked button
+            this.classList.add("bgcolor");
+        });
+    });
+
+    // Add click event listener to each button
+    balanceButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            // Remove the 'bgcolor' class from all buttons
+            balanceButtons.forEach(btn => btn.classList.remove("bgcolor"));
+            // Add the 'bgcolor' class to the clicked button
+            this.classList.add("bgcolor");
+        });
+    });
+    function popupshow(e) {
+        choosedData.innerText = e.innerText;
+        popuptoproceed.style.display = "block";
+    }
+    // Select all the div elements with the class starting with 'Betting__C-numC-item'
+    const bettingbtnItems = document.querySelectorAll("[class^='Betting__C-numC-item']");
+    // Add a click event listener to each div
+    bettingbtnItems.forEach(item => {
+        item.addEventListener('click', function () {
+            // Get the class name of the clicked element
+            const className = this.className;
+            const number = className.charAt(className.length - 1);
+            choosedData.innerText = number;
+            popuptoproceed.style.display = "block";
+        });
+    });
+
+    // Function to handle placing the bet
+    function placeBet() {
+        // Get the selected bet amount and chosen bet
+        const betAmountText = document.getElementById("total-amount").textContent; // Get the total amount displayed
+        const choosedBet = document.getElementById("chosed-data").textContent; // Get the selected bet option
+
+        // Extract numeric value from the betAmount (remove rupee symbol or any non-numeric characters)
+        const betAmount = parseFloat(betAmountText.replace(/[^0-9.]/g, '')); // Extract only the numeric part
+
+        // Ensure betAmount and choosedBet are valid before sending the request
+        if (isNaN(betAmount) || !choosedBet) {
+            alert("Please select a bet and enter a valid amount.");
+            return;
+        }
+    document.getElementById("betAmountInput").value = betAmount;
+    document.getElementById("choosedBetInput").value = choosedBet;
+    document.getElementById("betForm").submit();
+    }
+
+    // Attach the function to the total button click event
+    document.querySelector('.Betting__Popup-foot-s').addEventListener('click', placeBet);
+
+    setInterval(() => {
+        let a = document.getElementById('firstDigit').innerText;
+        let b = document.getElementById('secondDigit').innerText;
+        let num = Number(a + "" + b);
+        if (num < 6) {
+            popuptoproceed.style.display = "none";
+        }
+    }, 600);
+</script>
