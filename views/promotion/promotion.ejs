@@ -6,11 +6,11 @@
 
     <link rel="icon" type="image/svg+xml"
         href="https://ossimg.big-mumadmin888.com/bigmumbai/other/h5setting_20230814170913idlb.ico">
-        <meta name="google" content="notranslate">
-        <meta name="robots" content="noindex,nofollow">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        
-        <title>BigMumbai</title>
+    <meta name="google" content="notranslate">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>BigMumbai</title>
     <!-- footer css  -->
     <link rel="stylesheet" href="https://mumbai-big.com/assets/css/index-8560823f.css">
 
@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="css/promotion/page-promotion-0009c24a.css">
 </head>
 
-<body class="" style="font-size: 12px;">
+<body class="" style="font-size: 12px; overflow-x: hidden;">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
         style="position: absolute; width: 0; height: 0">
         <symbol id="icon-Line" viewBox="0 0 2 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -273,8 +273,11 @@
 
 
         <div data-v-600663f7="" class="content" style="--f13b4d11-currentFontFamily: Roboto, Inter, sans-serif;">
-            <div data-v-600663f7="" class="shareBtnContainer"><button data-v-600663f7="" class="shareBtn">INVITATION
-                    LINK</button></div>
+            <div onclick="copyInvitationLink()" style="padding-right: 200px;" data-v-600663f7="" class="shareBtnContainer"><button data-v-600663f7=""
+                    class="shareBtn">INVITATION
+                    LINK</button>
+                </div>
+
             <div data-v-600663f7="" class="promote__cell">
                 <div data-v-600663f7="" class="promote__cell-item">
                     <div data-v-600663f7="" class="label"><svg data-v-600663f7="" class="svg-icon icon-team_partner">
@@ -353,17 +356,27 @@
                 </div>
             </div><!-- <PromoRank /> -->
         </div><!--online custom service-->
-        <div class="customer" id="customerId"
-            style="--f13b4d11-currentFontFamily: Roboto, Inter, sans-serif; --f6a705e1-currentFontFamily: bahnschrift;">
-            <img class="" src="images/promotion/icon_sevice-af9dd176.png">
-        </div>
-        <!-- footer  -->
-<%-include("../partials/footer.ejs")%>
+        <%-include("../partials/customer-service.ejs")%>
+            <!-- footer  -->
+            <%-include("../partials/footer.ejs")%>
+                <script>
+
+                    function copyInvitationLink() {
+                        const protocol = window.location.protocol;
+                        const domain = window.location.hostname;
+                        const baseUrl = protocol + "//" + domain;
+                        const newUrl = baseUrl + "/signup?invite=89012344234";
+                        const tempInput = document.createElement('input');
+                        tempInput.value = newUrl;
+                        document.body.appendChild(tempInput);
+                        tempInput.select();
+                        tempInput.setSelectionRange(0, 99999); // For mobile devices
+                        document.execCommand("copy");
+                        document.body.removeChild(tempInput);
+                        alert("Invitation Link Copied");
+                    }
+                </script>
     </div>
-
-
-
-
 </body>
 
 </html>

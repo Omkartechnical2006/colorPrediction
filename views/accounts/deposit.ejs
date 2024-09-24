@@ -542,8 +542,8 @@
 			</div><!-- Safe Points Mall Betting-Transaction-Recharge-Withdrawal -->
 			<div data-v-acd6d46f="" data-v-a78765c7="" class="financialServices__container">
 				<!--v-if--><!-- Bet-Trade-Recharge-Withdraw-->
-				<div onclick="window.location.href='/main/game-history'" data-v-acd6d46f="" class="financialServices__container-box">
-					<div data-v-acd6d46f=""><svg data-v-acd6d46f="" class="svg-icon icon-betHistory">
+				<div data-v-acd6d46f="" class="financialServices__container-box">
+					<div data-v-acd6d46f="" onclick="window.location.href='/main/game-history'"><svg data-v-acd6d46f="" class="svg-icon icon-betHistory">
 							<use xlink:href="#icon-betHistory"></use>
 						</svg>
 						<div data-v-acd6d46f="" class="financialServices__container-box-para">
@@ -712,7 +712,7 @@
 								<use xlink:href="#icon-notificationCenter"></use>
 							</svg><!-- <img v-lazy="getIcons('main', `${item.icon}`)" /> --><span
 								data-v-159bf81f="">Notification</span></div>
-						<div data-v-159bf81f="" class="serviceCenter__container-items__item"><svg data-v-159bf81f=""
+						<div onclick="window.location.href='/help'" data-v-159bf81f="" class="serviceCenter__container-items__item"><svg data-v-159bf81f=""
 								class="svg-icon icon-server">
 								<use xlink:href="#icon-server"></use>
 							</svg><!-- <img v-lazy="getIcons('main', `${item.icon}`)" /> --><span
@@ -722,7 +722,7 @@
 								<use xlink:href="#icon-guide"></use>
 							</svg><!-- <img v-lazy="getIcons('main', `${item.icon}`)" /> --><span
 								data-v-159bf81f="">Beginner's Guide</span></div>
-						<div data-v-159bf81f="" class="serviceCenter__container-items__item"><svg data-v-159bf81f=""
+						<div onclick="window.location.href='/about'" data-v-159bf81f="" class="serviceCenter__container-items__item"><svg data-v-159bf81f=""
 								class="svg-icon icon-about">
 								<use xlink:href="#icon-about"></use>
 							</svg><!-- <img v-lazy="getIcons('main', `${item.icon}`)" /> --><span
@@ -732,11 +732,7 @@
 			</div>
 		</div>
 		<!--online customer service-->
-		<div class="customer" id="customerId"
-			style="--f13b4d11-currentFontFamily: Roboto, Inter, sans-serif; --f6a705e1-currentFontFamily: bahnschrift;">
-			<img class="" data-origin="/assets/png/icon_sevice-af9dd176.png"
-				src="images/accounts/icon_sevice-af9dd176.png">
-		</div>
+		<%-include("../partials/customer-service.ejs")%>
 		<!-- footer  -->
 		<%-include("../partials/footer.ejs")%>
 	</div>

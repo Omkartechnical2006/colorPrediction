@@ -456,6 +456,11 @@ app.get("/logout", (req, res) => {
 
     })
 });
+
+app.get("/help",(req,res)=>{
+    res.render("help/help-center.ejs");
+});
+
 app.get("/about", (req, res) => {
     res.render("conditions/about.ejs");
 });

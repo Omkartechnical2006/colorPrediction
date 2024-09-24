@@ -118,8 +118,9 @@
                 </div>
                 <button data-v-f4625e1a="">Detail</button>
             </div>
-            <div data-v-7a43ac05="" data-v-17e11782="" class="game_menu">
+            <div data-v-7a43ac05="" data-v-17e11782="" class="game_menu" onclick="comingsoon()">
                 <div data-v-7a43ac05="" class="game_menu_list">
+                    
                     <div data-v-7a43ac05="" class="gamen_item active"
                         style="background-image: url('https://ossimg.Big-Mumadmin888.com/bigmumbai/gamecategory/gamecategory_20230814172946h699.png');">
                         <span data-v-7a43ac05="">Lottery</span>
@@ -204,7 +205,7 @@
                     <div data-v-9960823f="" class="driver"></div>
                     <!---->
                     <!---->
-                    <div data-v-aa0964dd="" data-v-9960823f="" class="lottery_container">
+                    <div data-v-aa0964dd="" data-v-9960823f="" class="lottery_container" onclick="window.location.href='/wingo'">
                         <div data-v-aa0964dd="" onclick="location.href='/wingo'" class="lotterySlotItem wingo">
                             <img data-v-aa0964dd="" src="https://mumbai-big.com/assets/png/wingo1-26adecc4.png" alt="">
                             <div data-v-aa0964dd="">Win Go 1Min</div>
@@ -350,21 +351,26 @@
                     </div>
                 </div>
             </div>
-
-            <!-- hourse service  -->
-            <div data-v-8a2fbe28="" data-v-17e11782="" class="changlongEnter"></div>
-
-            <!-- customer service      -->
-            <div class="customer" id="customerId"
-                style="--76181987: 'Roboto', 'Inter', sans-serif; --17a7a9f6: bahnschrift;">
-                <img class="" data-origin="https://mumbai-big.com/assets/png/icon_sevice-af9dd176.png"
-                    src="https://mumbai-big.com/assets/png/icon_sevice-af9dd176.png">
-            </div>
+            <!-- customer service  -->
+             <%-include("../partials/customer-service.ejs")%>
             <!-- footer  -->
             <%-include("../partials/footer.ejs")%>
         </div>
         <!-- upper slideshow image  -->
         <script src="js/home/script.js"></script>
+        <script>
+            function comingsoon(){
+                let gameMenuHtml=``;
+                let a = document.getElementsByClassName("game_menu_list")[0];
+                gameMenuHtml=a.innerHTML;
+                a.innerHTML=`<div id="gifContainer" class="gif-container" style="width: 100%;">
+                        <img src="images/comingsoon.gif" alt="Your GIF" width="300px" height="250px"/>
+                    </div>`
+                    setTimeout(() => {
+                        a.innerHTML=gameMenuHtml;
+                    }, 1000);
+            }
+        </script>
 </body>
 
 </html>

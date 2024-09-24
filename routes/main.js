@@ -14,6 +14,10 @@ router.route('/recharge')
     })
     .post(isLoggedIn, async (req, res) => {
         const { transactionId, amount } = req.body;
+        if(!transactionId || !amount){
+            console.log(transactionId,amount)
+        }
+        console.log(transactionId,amount)
         const newDeposit = new Deposit({
             userId: req.user._id,
             username: req.user.username,
@@ -130,4 +134,5 @@ router.get("/game-history",isLoggedIn,async(req,res)=>{
        req.flash("success","Game History not found!");
     }
 });
+
 module.exports = router;

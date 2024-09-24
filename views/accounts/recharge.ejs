@@ -1,69 +1,83 @@
-<style>
-     body {
-            font-family: Arial, sans-serif;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recharge</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: rgba(0, 0, 0, 0.5); /* Background color with transparency */
+            backdrop-filter: blur(10px); /* Blur effect */
+            -webkit-backdrop-filter: blur(10px); /* Safari support */
+            color: white; /* White text for contrast */
+            min-height: 100vh; /* Ensure body takes full height */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
             margin: 0;
-            padding: 20px;
-            background-color: #f9f9f9;
         }
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        img {
-            display: block;
-            margin: 0 auto;
-            max-width: 100%;
-            height: auto;
-        }
-        form {
-            text-align: center;
-            margin-top: 20px;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        input {
+        .form-container {
+            background: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
+            backdrop-filter: blur(15px); /* More blur for the form background */
+            border-radius: 15px; /* Rounded corners */
+            padding: 20px; /* Padding inside the form */
             width: 100%;
-            max-width: 300px;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            max-width: 400px; /* Max width for better responsiveness */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Soft shadow for depth */
         }
-        button {
-            padding: 10px 15px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #218838;
-        }
+        .hidden { display: none; }
+        #preview { width: 100%; height: auto; border-radius: 10px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1 class="text-center mb-4">Recharge</h1>
 
-        /* Responsive styles */
-        @media (max-width: 600px) {
-            input {
-                max-width: 90%;
+        <!-- Display QR Code -->
+        <div class="text-center mb-3">
+            <img src="<%= imageUrl %>" alt="QR Code" width="200">
+        </div>
+        <form id="rechargeForm" action="/main/recharge" method="POST">
+            <div class="form-group">
+                <label for="transactionId">Transaction ID:</label>
+                <input type="text" name="transactionId" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount:</label>
+                <input type="number" name="amount" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="paymentScreenshot">Upload Payment Screenshot:</label>
+                <input type="file" name="paymentScreenshot" id="paymentScreenshot" class="form-control" accept="image/*">
+            </div>
+            <div style="max-height: 250px;overflow-y: scroll;" class="form-group">
+                <img id="preview" class="hidden" src="#" alt="Payment Screenshot Preview">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('paymentScreenshot');
+        const previewImage = document.getElementById('preview');
+
+        // Show image preview when a file is selected
+        fileInput.addEventListener('change', function () {
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImage.src = e.target.result;
+                    previewImage.classList.remove('hidden'); // Show the preview image
+                };
+                reader.readAsDataURL(file);
+            } else {
+                previewImage.classList.add('hidden'); // Hide the preview if no file selected
             }
-            form {
-                padding: 15px;
-            }
-        }
-</style>
-<h1 style="text-align: center;">Recharge</h1>
-<img src="<%= imageUrl %>" alt="QR Code" style="display:block;margin: 0 auto;" />
-<form action="/main/recharge" method="POST" style="text-align:center; margin-top:20px;">
-    <label for="transactionId">Transaction ID:</label>
-    <input type="text" name="transactionId" id="transactionId" required /><br><br>
-    <label for="amount">Amount (₹):</label>
-    <input type="number" name="amount" id="amount" required /><br><br>
-    <button type="submit">Submit</button>
-</form>
+        });
+    </script>
+</body>
+</html>
