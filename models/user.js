@@ -20,6 +20,13 @@ const userSchema = new Schema({
     balance: {
         type: Number,
         default: 0  // User balance for deposits
+    },
+    uid: {
+        type: String,
+        unique: true
+    },
+    lastLogin: { // New field for last login
+        type: Date
     }
 });
 
