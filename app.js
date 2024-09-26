@@ -33,7 +33,7 @@ const store = MongoStore.create({
     },
     touchAfter: 24*3600,
 });                     
-store.on("error",()=>{
+store.on("error",(err)=>{
     console.log("Error in mongo session store",err);
 })
 const sessionOptions = {
@@ -49,6 +49,7 @@ const sessionOptions = {
 }
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+app.use(flash());
 app.use(express.static('public'));
 app.use(express.json()); // to parse JSON data
 app.use(express.urlencoded({ extended: true })); // to parse URL-encoded form data
@@ -62,11 +63,11 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-app.use(flash());
 // Middleware to make flash messages available in all views
 app.use((req, res, next) => {
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
+    console.log(res.locals.success,res.locals.error);
     next();
 });
 // req will be available on ejs 

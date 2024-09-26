@@ -96,6 +96,15 @@
             display: none;
             /* For Chrome, Safari, and Opera */
         }
+        .green{
+            color: green!important;
+        }
+        .red{
+            color: #d23838!important;
+        }
+        .violet{
+            color: #9b48db!important;
+        }
 
         .n0 {
             background-image: url('images/games/wingo/n0-30bd92d1.png') !important;
@@ -269,13 +278,13 @@
                     resultsDiv.innerHTML += `<div data-v-481307ec="" class="van-row">
                         <div data-v-481307ec="" class="van-col van-col--8">${result.currCycleId}</div>
                         <div data-v-481307ec="" class="van-col van-col--5 numcenter">
-                        <div data-v-481307ec="" class="GameRecord__C-body-num mixedColor5">${result.numberResult}</div>
+                        <div data-v-481307ec="" class="GameRecord__C-body-num  ${result.colorResult}">${result.numberResult}</div>
                         </div>
                         <div data-v-481307ec="" class="van-col van-col--5">
                             <span data-v-481307ec="">${result.bigSmallResult}</span>
                             </div>
                         <div data-v-481307ec="" class="van-col van-col--6">
-                        <div data-v-481307ec="" class="GameRecord__C-origin"><!--v-if--><!--v-if--><!--v-if-->
+                        <div data-v-481307ec="" class="GameRecord__C-origin">
                         <div data-v-481307ec="" class="GameRecord__C-origin-I ${result.colorResult}"></div>
                         </div>
                         </div>

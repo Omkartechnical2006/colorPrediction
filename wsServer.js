@@ -3,7 +3,6 @@ const Cycle = require('./models/cycle');
 const WingoBetResult = require('./models/WingoBetResult');
 function startWebSocketServer(port) {
     const wss = new WebSocket.Server({ port });
-
     wss.on('connection', (ws) => {
         console.log('Client connected');
         // Send the initial state to the newly connected client
