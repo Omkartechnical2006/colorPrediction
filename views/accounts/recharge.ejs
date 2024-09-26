@@ -38,7 +38,7 @@
 
         <!-- Display QR Code -->
         <div class="text-center mb-3">
-            <img src="<%= imageUrl %>" alt="QR Code" width="200">
+            <img src="<%= qrCodeUrl %>" alt="QR Code" width="200">
         </div>
         <form id="rechargeForm" action="/main/recharge" method="POST">
             <div class="form-group">
@@ -58,8 +58,12 @@
             </div>
             <button type="submit" class="btn btn-primary btn-block">Submit</button>
         </form>
+        <div style="text-align: center">
+            <br><br>
+            <p style="color: orange;">If you need, any Guidance Please Cotact us! <br>CUSTOMER EXECUTIVE</p>
+         <%-include("../partials/customer-service.ejs")%>
+        </div>
     </div>
-
     <script>
         const fileInput = document.getElementById('paymentScreenshot');
         const previewImage = document.getElementById('preview');

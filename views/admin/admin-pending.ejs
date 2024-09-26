@@ -9,8 +9,11 @@
 <body>
     <div class="container mt-5">
         <h2>Pending Deposits</h2>
+        <!-- Search input for filtering by Username -->
+        <input type="text" id="usernameSearch" placeholder="Search by Username" class="form-control mb-3" onkeyup="filterTable('pendingDepositsTable')">
+        
         <% if (pendingDeposits.length > 0) { %>
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered table-hover" id="pendingDepositsTable">
                 <thead>
                     <tr>
                         <th>Username</th>
@@ -23,7 +26,7 @@
                 <tbody>
                     <% pendingDeposits.forEach(deposit => { %>
                         <tr>
-                            <td><%= deposit.userId.username %></td>
+                            <td><%= deposit.username %></td>
                             <td><%= deposit.amount %></td>
                             <td><%= deposit.transactionId %></td>
                             <td><%= deposit.date.toDateString() %></td>
@@ -44,8 +47,10 @@
         <% } %>
 
         <h2>Approved Deposits</h2>
+        <input type="text" id="approvedSearch" placeholder="Search by Username" class="form-control mb-3" onkeyup="filterTable('approvedDepositsTable')">
+
         <% if (approvedDeposits.length > 0) { %>
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered table-hover" id="approvedDepositsTable">
                 <thead>
                     <tr>
                         <th>Username</th>
@@ -57,7 +62,7 @@
                 <tbody>
                     <% approvedDeposits.forEach(deposit => { %>
                         <tr>
-                            <td><%= deposit.userId.username %></td>
+                            <td><%= deposit.username %></td>
                             <td><%= deposit.amount %></td>
                             <td><%= deposit.transactionId %></td>
                             <td><%= deposit.date.toDateString() %></td>
@@ -70,8 +75,10 @@
         <% } %>
 
         <h2>Rejected Deposits</h2>
+        <input type="text" id="rejectedSearch" placeholder="Search by Username" class="form-control mb-3" onkeyup="filterTable('rejectedDepositsTable')">
+
         <% if (rejectedDeposits.length > 0) { %>
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered table-hover" id="rejectedDepositsTable">
                 <thead>
                     <tr>
                         <th>Username</th>
@@ -83,7 +90,7 @@
                 <tbody>
                     <% rejectedDeposits.forEach(deposit => { %>
                         <tr>
-                            <td><%= deposit.userId.username %></td>
+                            <td><%= deposit.username %></td>
                             <td><%= deposit.amount %></td>
                             <td><%= deposit.transactionId %></td>
                             <td><%= deposit.date.toDateString() %></td>
@@ -95,5 +102,25 @@
             <p>No rejected deposits.</p>
         <% } %>
     </div>
+
+    <script>
+        // Function to filter table rows by username
+        function filterTable(tableId) {
+            const searchValue = document.getElementById(tableId === 'pendingDepositsTable' ? 'usernameSearch' : 
+                                tableId === 'approvedDepositsTable' ? 'approvedSearch' : 'rejectedSearch').value.toLowerCase();
+            const table = document.getElementById(tableId);
+            const rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) { // Start from 1 to skip the header row
+                const username = rows[i].getElementsByTagName('td')[0].textContent.toLowerCase(); // Assuming Username is in the 1st column
+                if (username.includes(searchValue)) {
+                    rows[i].style.display = ''; // Show row if username matches
+                } else {
+                    rows[i].style.display = 'none'; // Hide row if no match
+                }
+            }
+        }
+    </script>
+
 </body>
 </html>

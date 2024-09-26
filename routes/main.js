@@ -5,19 +5,34 @@ const Deposit = require('../models/deposit');
 const Withdrawal = require('../models/Withdrawal');
 const Wingo3Bet = require('../models/wingo3bet');
 const moment = require('moment-timezone');
+const Info = require('../models/Info');
 
 // Route for deposit form (GET) and submission (POST)
 router.route('/recharge')
-    .get(isLoggedIn, (req, res) => {
-        const imageUrl = "https://i.postimg.cc/7YM3M6jK/photo-2024-09-23-21-10-42.jpg"; // Replace with your QR image link
-        res.render('accounts/recharge.ejs', { imageUrl });
+    .get(isLoggedIn, async (req, res) => {
+        try {
+            const info = await Info.findOne();
+            if (!info) {
+                return res.status(404).render('error', { message: 'Info not found' });
+            }
+            const qrCodeUrl = info.qrCodeLink;
+            res.render('accounts/recharge.ejs', { qrCodeUrl });
+        }catch (error) {
+            console.error('Error fetching QR code:', error);
+            res.status(500).render('error', { message: 'Internal server error' });
+        }
     })
     .post(isLoggedIn, async (req, res) => {
         const { transactionId, amount } = req.body;
-        if(!transactionId || !amount){
-            console.log(transactionId,amount)
+        if (!transactionId || !amount) {
+            req.flash("success", "you request is declined");
+            res.redirect("/home");
         }
-        console.log(transactionId,amount)
+        if (amount <= 0) {
+            return res.status(400).json({
+                error: "Amount must be greater than zero"
+            });
+        }
         const newDeposit = new Deposit({
             userId: req.user._id,
             username: req.user.username,
@@ -77,6 +92,14 @@ router.route("/withdraw")
     })
     .post(isLoggedIn, async (req, res) => {
         const { amount, accountDetails } = req.body;
+        if (!amount || !accountDetails) {
+            req.flash("error", "amount or accdetails is not defined");
+            return res.redirect("/main");
+        }
+        if (amount <= 0) {
+            req.flash("error", "amount is not applicable");
+            res.redirect("/main")
+        }
         const user = req.user;  // Assuming req.user contains the logged-in user's details
         if (user.balance >= amount) {
             // Create and save the withdrawal request
@@ -104,7 +127,7 @@ router.get('/withdraw-history', isLoggedIn, async (req, res) => {
     res.render('accounts/user-withdraw-history', { withdrawals });
 });
 // User views their game history;
-router.get("/game-history",isLoggedIn,async(req,res)=>{
+router.get("/game-history", isLoggedIn, async (req, res) => {
     try {
         // Find the current user's game history
         const userId = req.user._id;
@@ -131,7 +154,7 @@ router.get("/game-history",isLoggedIn,async(req,res)=>{
         // Render the game-history template with the formatted data
         res.render('accounts/game-history', { gameHistory: formattedHistory });
     } catch (error) {
-       req.flash("success","Game History not found!");
+        req.flash("success", "Game History not found!");
     }
 });
 

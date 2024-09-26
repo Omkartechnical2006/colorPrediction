@@ -1,94 +1,151 @@
-<style>
-    body {
-    font-family: Arial, sans-serif;
-    background: url('your-background-image.jpg') no-repeat center center fixed;
-    background-size: cover;
-}
+<!DOCTYPE html>
+<html lang="en">
 
-.container {
-    margin: 50px auto;
-    padding: 20px;
-    z-index: 999;
-    max-width: 900px;
-    background: rgba(255, 255, 255, 0.15); /* Frosted glass */
-    border-radius: 20px;
-    background-color: orange;
-    backdrop-filter: blur(10px); /* Blur for glass effect */
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    border: 1px solid rgba(255, 255, 255, 0.3); /* Light border */
-}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            margin: 0;
+            padding: 0;
+        }
 
-h2, h3 {
-    text-align: center;
-    color: black; /* White text for contrast */
-}
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: rgba(255, 255, 255, 0.25); /* Slightly transparent background */
-    margin-top: 20px;
-    border-radius: 10px;
-    overflow: hidden;
-}
+        .container {
+            margin: 50px auto;
+            padding: 30px;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.8); /* White glass effect */
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 50px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-out;
+        }
 
-table, th, td {
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Light border */
-}
+        h2, h3 {
+            text-align: center;
+            color: #333;
+        }
 
-th, td {
-    padding: 12px;
-    text-align: center;
-    color: black;
-}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.9);
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            animation: fadeIn 1.5s ease-out;
+        }
 
-thead {
-    background: rgba(255, 255, 255, 0.25); /* Transparent header */
-}
+        th, td {
+            padding: 15px;
+            text-align: center;
+            color: #333;
+            font-size: 1.1em;
+        }
 
-tbody tr:hover {
-    background: rgba(255, 255, 255, 0.1); /* Row hover effect */
-}
+        thead {
+            background: rgba(245, 245, 245, 0.9);
+        }
 
-p {
-    color: #fff;
-    text-align: center;
-}
+        tbody tr {
+            background-color: rgba(255, 255, 255, 0.9);
+            transition: background-color 0.3s ease;
+        }
 
-</style>
-<div class="container">
-    <h2>Transaction History</h2>
+        tbody tr:hover {
+            background-color: rgba(245, 245, 245, 0.9);
+            transform: scale(1.02);
+            transition: transform 0.2s ease-out;
+        }
 
-    <h3>Total Deposits: <%= totalDeposits %></h3>
-    <h3>Total Withdrawals: <%= totalWithdrawals %></h3>
+        p {
+            color: #333;
+            text-align: center;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
 
-    <% if (transactions.length === 0) { %>
-        <p>No transactions found.</p>
-    <% } else { %>
-        <table>
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Type</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% transactions.forEach(transaction => { %>
+        /* Media queries for responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 20px;
+            }
+
+            th, td {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            th, td {
+                padding: 8px;
+                font-size: 0.8em;
+            }
+
+            h2, h3 {
+                font-size: 1.5em;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Transaction History</h2>
+
+        <h3>Total Deposits: ₹<%= totalDeposits %></h3>
+        <h3>Total Withdrawals: ₹<%= totalWithdrawals %></h3>
+
+        <% if (transactions.length === 0) { %>
+            <p>No transactions found.</p>
+        <% } else { %>
+            <table>
+                <thead>
                     <tr>
-                        <td><%= transaction.date.toDateString() %></td>
-                        <td>
-                            <% if (transaction.accountDetails) { %>
-                                Withdrawal
-                            <% } else { %>
-                                Deposit
-                            <% } %>
-                        </td>
-                        <td><%= transaction.amount %></td>
-                        <td><%= transaction.status %></td>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Status</th>
                     </tr>
-                <% }) %>
-            </tbody>
-        </table>
-    <% } %>
-</div>
+                </thead>
+                <tbody>
+                    <% transactions.forEach(transaction => { %>
+                        <tr>
+                            <td><%= transaction.date.toDateString() %></td>
+                            <td>
+                                <% if (transaction.accountDetails) { %>
+                                    Withdrawal
+                                <% } else { %>
+                                    Deposit
+                                <% } %>
+                            </td>
+                            <td>₹<%= transaction.amount %></td>
+                            <td><%= transaction.status %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } %>
+    </div>
+
+</body>
+
+</html>

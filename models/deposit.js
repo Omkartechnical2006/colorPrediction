@@ -18,7 +18,8 @@ const depositSchema = new Schema({
     },
     amount: {
         type: Number,
-        required: true
+        required: true,
+        min: [0, 'Amount cannot be negative']
     },
     status: {
         type: String,

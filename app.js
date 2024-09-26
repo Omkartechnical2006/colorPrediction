@@ -3,7 +3,9 @@ const express = require("express");
 const app = express();
 const path = require('path');
 const session = require("express-session");
+const methodOverride = require('method-override');
 const Cycle = require('./models/cycle');
+const Info = require('./models/Info'); 
 const WingoBetResult = require('./models/WingoBetResult');
 const passport = require("passport");
 const flash = require('connect-flash');
@@ -17,6 +19,8 @@ const wingoRouter = require("./routes/wingo.js");
 const Wingo3Bet = require('./models/wingo3bet');
 const loginRouter = require("./routes/login.js");
 const mainRouter = require("./routes/main.js");
+
+const initializeDefaultData = require('./utils/initializeData');
 const WebSocket = require('ws');
 const { startWebSocketServer, saveCycleToDB } = require('./wsServer');
 const { startTimer, timeLeft, cycleCount, currentCycleId } = require('./timer');
@@ -36,6 +40,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static('public'));
 app.use(express.json()); // to parse JSON data
 app.use(express.urlencoded({ extended: true })); // to parse URL-encoded form data
+app.use(methodOverride('_method'));
 
 app.use(session(sessionOptions));
 app.use(passport.initialize());
@@ -60,10 +65,11 @@ app.use((req, res, next) => {
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URL)
-    .then(() => {
+    .then(async() => {
         console.log('Connected to MongoDB');
         resetResultDb();
         initializeCycle();
+        await initializeDefaultData();
     })
     .catch(err => console.error("MongoDB connection error:", err));
 
@@ -93,26 +99,22 @@ async function initializeCycle() {
         // Check if any cycles exist in the database
         const existingCycle = await Cycle.findOne();
         if (existingCycle) {
-            // If cycles are found, delete them (only on first server start)
             await Cycle.deleteMany({});
-            // console.log("Deleted existing cycles on first server start.");
         }
         // Create the first cycle with the format YYYYMMDD01
         const now = new Date();
         const year = now.getFullYear().toString();
-        const month = String(now.getMonth() + 1).padStart(2, '0'); // Ensure two-digit month
-        const day = String(now.getDate()).padStart(2, '0'); // Ensure two-digit day
-        const initialCycleId = `${year}${month}${day}01`; // Format as YYYYMMDD01
-
+        const month = String(now.getMonth() + 1).padStart(2, '0'); 
+        const day = String(now.getDate()).padStart(2, '0'); 
+        const initialCycleId = `${year}${month}${day}01`; 
         // Create and save the initial cycle
         const newCycle = new Cycle({
             cycleId: initialCycleId,
             createdAt: now
         });
         await newCycle.save();
-        // console.log(`Initialized first cycle: ${initialCycleId}`);
-
         // Start the cycle result handling process after initializing the cycle
+        // it will only fire handlecylceresult when admin hasn't sent any result 
         handleCycleResult();
     } catch (error) {
         console.error('Error during cycle initialization:', error);
@@ -457,8 +459,18 @@ app.get("/logout", (req, res) => {
     })
 });
 
-app.get("/help",(req,res)=>{
-    res.render("help/help-center.ejs");
+app.get("/help",async(req,res)=>{
+    try {
+        const info = await Info.findOne(); // Fetch the Info document
+        if (!info) {
+            return res.status(404).render('error', { message: 'Info not found' });
+        }
+        const telegramLink = info.telegramLink;
+        res.render("help/help-center.ejs",{telegramLink});
+    }catch (error){
+        console.error('Error fetching QR code:', error);
+        res.status(500).render('error', { message: 'Internal server error' });
+    }
 });
 
 app.get("/about", (req, res) => {

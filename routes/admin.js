@@ -6,7 +6,7 @@ const Deposit = require('../models/deposit');
 const { isLoggedIn } = require("../middlewares/isLoggedIn.js");
 const Withdrawal = require('../models/Withdrawal');
 const WingoBet = require('../models/wingo3bet');
-
+const Info = require('../models/Info'); 
 
 
 // admin 
@@ -26,7 +26,8 @@ router.get("/create", async (req, res) => {
         const adminUser = new User({
             username: 'admin',
             mobile: '1234567890',
-            isAdmin: true
+            isAdmin: true,
+            uid: '14314312'
         });
         await User.register(adminUser, 'Prince@9876');  // Register admin with password
 
@@ -123,13 +124,11 @@ router.post('/withdrawals/:id/reject', isLoggedIn, isAdmin, async (req, res) => 
 
 // deposits
 // Admin view for approving/rejecting deposits
-// Route to get pending deposits
 router.get('/pending-deposits', isLoggedIn, isAdmin, async (req, res) => {
     try {
         const pendingDeposits = await Deposit.find({ status: 'pending' }).populate('userId', 'username'); // Populate user details
         const approvedDeposits = await Deposit.find({ status: 'approved' }).populate('userId', 'username');
         const rejectedDeposits = await Deposit.find({ status: 'rejected' }).populate('userId', 'username');
-
         res.render('admin/admin-pending', {
             pendingDeposits,
             approvedDeposits,
@@ -150,7 +149,6 @@ router.post('/approve/:id', isLoggedIn, isAdmin, async (req, res) => {
     const user = await User.findById(deposit.userId);
     user.balance += deposit.amount;
     await user.save();
-
     req.flash('success', `Deposit of ₹${deposit.amount} by ${deposit.username} approved.`);
     res.redirect('/admin/pending-deposits');
 });
@@ -258,10 +256,143 @@ router.get("/game-history", isLoggedIn, isAdmin, async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+// Don't forget to isloogedin and isAdmin 
+router.get("/dashboard",isLoggedIn,isAdmin,async(req,res)=>{
+    try {
+        // 1. Get today's date range (start and end of today)
+        const startOfDay = new Date();
+        startOfDay.setHours(0, 0, 0, 0);  // Start of today (00:00:00)
 
+        const endOfDay = new Date();
+        endOfDay.setHours(23, 59, 59, 999);  // End of today (23:59:59)
 
-router.get("/", isLoggedIn, isAdmin, (req, res) => {
+        // 2. Aggregate the total amount of approved deposits for all users
+        const totalDepositsResult = await Deposit.aggregate([
+            {
+                $match: {
+                    status: 'approved'  // Only approved deposits
+                }
+            },
+            {
+                $group: {
+                    _id: null,  // No need to group by any field
+                    totalAmount: { $sum: "$amount" }  // Sum the amount field for total deposits
+                }
+            }
+        ]);
+
+        // 3. Aggregate today's approved deposits
+        const todayDepositsResult = await Deposit.aggregate([
+            {
+                $match: {
+                    status: 'approved',  // Only approved deposits
+                    date: {
+                        $gte: startOfDay,  // Greater than or equal to today's start
+                        $lt: endOfDay      // Less than the end of today
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: null,  // No need to group by any field
+                    todayAmount: { $sum: "$amount" }  // Sum the amount field for today's deposits
+                }
+            }
+        ]);
+
+        // 4. Aggregate the total amount of paid withdrawals for all users
+        const totalWithdrawalsResult = await Withdrawal.aggregate([
+            {
+                $match: {
+                    status: 'paid'  // Only paid withdrawals
+                }
+            },
+            {
+                $group: {
+                    _id: null,  // No need to group by any field
+                    totalWithdrawAmount: { $sum: "$amount" }  // Sum the amount field for total withdrawals
+                }
+            }
+        ]);
+
+        // 5. Aggregate today's paid withdrawals
+        const todayWithdrawalsResult = await Withdrawal.aggregate([
+            {
+                $match: {
+                    status: 'paid',  // Only paid withdrawals
+                    date: {
+                        $gte: startOfDay,  // Greater than or equal to today's start
+                        $lt: endOfDay      // Less than the end of today
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: null,  // No need to group by any field
+                    todayWithdrawAmount: { $sum: "$amount" }  // Sum the amount field for today's withdrawals
+                }
+            }
+        ]);
+
+        // 6. Count total number of users
+        const totalUsersCount = await User.countDocuments({});
+
+        // 7. If there are no deposits or withdrawals, default amounts to 0
+        const totalAmount = totalDepositsResult.length > 0 ? totalDepositsResult[0].totalAmount : 0;
+        const todayAmount = todayDepositsResult.length > 0 ? todayDepositsResult[0].todayAmount : 0;
+        const totalWithdrawAmount = totalWithdrawalsResult.length > 0 ? totalWithdrawalsResult[0].totalWithdrawAmount : 0;
+        const todayWithdrawAmount = todayWithdrawalsResult.length > 0 ? todayWithdrawalsResult[0].todayWithdrawAmount : 0;
+
+        // 8. Pass all calculated values to the EJS template
+        res.render("admin/dashboard.ejs", {
+            totalAmount,         // Total approved deposits
+            todayAmount,         // Today's approved deposits
+            totalWithdrawAmount, // Total paid withdrawals
+            todayWithdrawAmount,  // Today's paid withdrawals
+            totalUsersCount      // Total number of users
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Server Error");
+    }
+});
+
+// edit the telegram and qrcodeurl
+router.route("/info")
+.get(isLoggedIn,isAdmin,async(req,res)=>{
+    try {
+        const info = await Info.findOne(); // Fetch the existing Info document
+        if (!info) {
+            return res.status(404).render('error', { message: 'Info not found' });
+        }
+        res.render('admin/info.ejs', { info });
+    } catch (error) {
+        console.error('Error fetching info:', error);
+        res.status(500).render('error', { message: 'Internal server error' });
+    }
+})
+.put(isLoggedIn,isAdmin,async (req, res) => {
+    const { telegramLink, qrCodeLink } = req.body;
+    try {
+        const updatedInfo = await Info.findOneAndUpdate(
+            {},
+            { telegramLink, qrCodeLink },
+            { new: true } // Return the updated document
+        );
+        if (!updatedInfo) {
+            return res.status(404).json({ message: 'Info not found' });
+        }
+        req.flash("success","updated successfully!🎁");
+        res.redirect("/admin/info") // Send the updated info as JSON
+    } catch (error) {
+        console.error('Error updating info:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+router.get("/",isLoggedIn,isAdmin,(req,res)=>{
     res.render("admin/admin.ejs");
 });
+
 
 module.exports = router;
