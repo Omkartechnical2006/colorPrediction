@@ -1624,9 +1624,9 @@ textarea {
     --text_color_L3: white;
     --text_color_L4: rgb(13, 104, 200);
     /* body color  */
-    --bg_color_L1: black;
+    --bg_color_L1: rgb(223, 220, 238); /* white bg in wingo first */
 
-    --bg_color_L2: orange;
+    --bg_color_L2: #09cb81; /*green bg wingo second color*/
     --bg_color_L3: rgb(96, 115, 96);
 
     --Dividing-line_color: black;
