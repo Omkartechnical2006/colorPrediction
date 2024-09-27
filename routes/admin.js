@@ -5,8 +5,11 @@ const isAdmin = require('../middlewares/isAdmin.js');
 const Deposit = require('../models/deposit');
 const { isLoggedIn } = require("../middlewares/isLoggedIn.js");
 const Withdrawal = require('../models/Withdrawal');
+const WingoBetResult = require('../models/WingoBetResult');
+
 const WingoBet = require('../models/wingo3bet');
-const Info = require('../models/Info'); 
+const fetchCurrentCycleData = require('../utils/fetchCurrentCycleData');
+const Info = require('../models/Info');
 
 
 // admin 
@@ -257,7 +260,7 @@ router.get("/game-history", isLoggedIn, isAdmin, async (req, res) => {
     }
 });
 // Don't forget to isloogedin and isAdmin 
-router.get("/dashboard",isLoggedIn,isAdmin,async(req,res)=>{
+router.get("/dashboard", isLoggedIn, isAdmin, async (req, res) => {
     try {
         // 1. Get today's date range (start and end of today)
         const startOfDay = new Date();
@@ -359,38 +362,41 @@ router.get("/dashboard",isLoggedIn,isAdmin,async(req,res)=>{
 
 // edit the telegram and qrcodeurl
 router.route("/info")
-.get(isLoggedIn,isAdmin,async(req,res)=>{
-    try {
-        const info = await Info.findOne(); // Fetch the existing Info document
-        if (!info) {
-            return res.status(404).render('error', { message: 'Info not found' });
+    .get(isLoggedIn, isAdmin, async (req, res) => {
+        try {
+            const info = await Info.findOne(); // Fetch the existing Info document
+            if (!info) {
+                return res.status(404).render('error', { message: 'Info not found' });
+            }
+            res.render('admin/info.ejs', { info });
+        } catch (error) {
+            console.error('Error fetching info:', error);
+            res.status(500).render('error', { message: 'Internal server error' });
         }
-        res.render('admin/info.ejs', { info });
-    } catch (error) {
-        console.error('Error fetching info:', error);
-        res.status(500).render('error', { message: 'Internal server error' });
-    }
-})
-.put(isLoggedIn,isAdmin,async (req, res) => {
-    const { telegramLink, qrCodeLink } = req.body;
-    try {
-        const updatedInfo = await Info.findOneAndUpdate(
-            {},
-            { telegramLink, qrCodeLink },
-            { new: true } // Return the updated document
-        );
-        if (!updatedInfo) {
-            return res.status(404).json({ message: 'Info not found' });
+    })
+    .put(isLoggedIn, isAdmin, async (req, res) => {
+        const { telegramLink, qrCodeLink } = req.body;
+        try {
+            const updatedInfo = await Info.findOneAndUpdate(
+                {},
+                { telegramLink, qrCodeLink },
+                { new: true } // Return the updated document
+            );
+            if (!updatedInfo) {
+                return res.status(404).json({ message: 'Info not found' });
+            }
+            req.flash("success", "updated successfully!🎁");
+            res.redirect("/admin/info") // Send the updated info as JSON
+        } catch (error) {
+            console.error('Error updating info:', error);
+            res.status(500).json({ message: 'Internal server error' });
         }
-        req.flash("success","updated successfully!🎁");
-        res.redirect("/admin/info") // Send the updated info as JSON
-    } catch (error) {
-        console.error('Error updating info:', error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-});
+    });
 
-router.get("/",isLoggedIn,isAdmin,(req,res)=>{
+
+
+
+router.get("/", isLoggedIn, isAdmin, (req, res) => {
     res.render("admin/admin.ejs");
 });
 

@@ -223,7 +223,9 @@
             ws.onmessage = (event) => {
                 const results = JSON.parse(event.data);
                 displayResults(results);
+                console.log("displayresutls",displayResults(results));
                 const data = JSON.parse(event.data);
+                console.log("data: ",data)
                 const timeLeft = data.timeLeft.toString().padStart(2, '0'); // Ensure two digits
                 const firstDigit = timeLeft[0]; // First digit
                 const secondDigit = timeLeft[1]; // Second digit

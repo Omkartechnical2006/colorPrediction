@@ -26,7 +26,7 @@ router.post("/bet", isLoggedIn, async (req, res) => {
     }
     res.locals.currCycleId = cycle[0].cycleId;
     // Check if there are cycles available
-    if (Cycle.length > 0) {
+    if (cycle.length > 0) {
         let cycleCreatedAtTime = new Date(cycle[0].createdAt);
         const currentTime = new Date();
         const twentyFiveMinutesLater = new Date(cycleCreatedAtTime.getTime() + 25 * 60 * 1000);

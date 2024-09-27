@@ -6,35 +6,39 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const methodOverride = require('method-override');
 const Cycle = require('./models/cycle');
-const Info = require('./models/Info'); 
+const Info = require('./models/Info');
 const WingoBetResult = require('./models/WingoBetResult');
 const passport = require("passport");
 const flash = require('connect-flash');
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
+const resetResultDb = require('./utils/resetResultDb');
 const { isLoggedIn } = require("./middlewares/isLoggedIn.js");
 const mongoose = require('mongoose');
 const signupRouter = require("./routes/signup.js");
 const adminRouter = require("./routes/admin.js");
 const wingoRouter = require("./routes/wingo.js");
+const isAdmin = require('./middlewares/isAdmin.js');
 const Wingo3Bet = require('./models/wingo3bet');
 const loginRouter = require("./routes/login.js");
 const mainRouter = require("./routes/main.js");
 const dbUrl = process.env.MONGO_URL;
 const initializeDefaultData = require('./utils/initializeData');
+const fetchCurrentCycleData = require('./utils/fetchCurrentCycleData');
 const WebSocket = require('ws');
 const { startWebSocketServer, saveCycleToDB } = require('./wsServer');
 const { startTimer, timeLeft, cycleCount, currentCycleId } = require('./timer');
+const { calculateResultTime } = require('./utils/calculateResultTime');
 const port = process.env.PORT || 3000;
 const store = MongoStore.create({
     mongoUrl: dbUrl,
-    crypto:{
+    crypto: {
         secret: process.env.SECRET
     },
-    touchAfter: 24*3600,
-});                     
-store.on("error",(err)=>{
-    console.log("Error in mongo session store",err);
+    touchAfter: 24 * 3600,
+});
+store.on("error", (err) => {
+    console.log("Error in mongo session store", err);
 })
 const sessionOptions = {
     store,
@@ -67,7 +71,7 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next) => {
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
-    console.log(res.locals.success,res.locals.error);
+    console.log(res.locals.success, res.locals.error);
     next();
 });
 // req will be available on ejs 
@@ -75,16 +79,101 @@ app.use((req, res, next) => {
     res.locals.user = req.user;
     next();
 });
-
 // MongoDB connection
 mongoose.connect(dbUrl)
-    .then(async() => {
+    .then(async () => {
         console.log('Connected to MongoDB');
         resetResultDb();
         initializeCycle();
         await initializeDefaultData();
     })
     .catch(err => console.error("MongoDB connection error:", err));
+
+// wingo One Minute Result Edit 
+app.get("/admin/wingooneresult", isLoggedIn, isAdmin, (req, res) => {
+    res.render("admin/wingoOneResult.ejs");
+})
+app.post("admin/wingooneresult", isLoggedIn, isAdmin, async (req, res) => {
+    const { color, size, selectedNumber } = req.body;
+
+    // Check for missing fields
+    if (!color || !size || !selectedNumber) {
+        req.flash("error", "Missing fields");
+        console.log("missing fields");
+        return res.redirect("/admin/wingooneresult");
+    }
+
+    try {
+        // Fetch the current cycle data
+        const cycleData = await fetchCurrentCycleData();
+
+        if (!cycleData) {
+            req.flash("error", "No active cycle found");
+            return res.redirect("/admin/wingooneresult");
+        }
+
+        const { cycleId, createdAt } = cycleData;
+        const currentTime = new Date();
+        const elapsedTime = currentTime - createdAt; // Time in milliseconds
+
+        // If the request is made after 28 seconds
+        if (elapsedTime > 28 * 1000) {
+            // Check if the result for this cycle already exists in the database
+            const existingResult = await WingoBetResult.findOne({ currCycleId: cycleId });
+
+            if (existingResult) {
+                console.log("you are late result has been declared");
+                req.flash("error", "Result for this cycle has already been declared");
+                return res.redirect("/admin/wingooneresult"); // Redirect to home if result already exists
+            } else {
+                console.log('applied your result')
+                // 28 seconds have passed, and no result exists yet, allow declaring the result
+                req.flash("success", `You can now declare the result for cycle ${cycleId}`);
+                console.log(`You can now declare the result for cycle ${cycleId}`)
+                return res.redirect("/admin/wingooneresult"); // Redirect to result declaration page
+            }
+        } else {
+            // If the request is made before 28 seconds, process and fetch relevant bets
+            const upperLimit = new Date(createdAt.getTime() + 25 * 1000); // Limit bet time to 25 seconds
+
+            // Fetch bets within the first 25 seconds of the current cycle
+            const WingoThreeBet = await Wingo3Bet.find({
+                date: {
+                    $gt: createdAt,
+                    $lte: upperLimit
+                }
+            });
+
+            // Create the result for the current cycle
+            const result = await WingoBetResult.create({
+                bigSmallResult: size, // Assuming 'size' corresponds to 'bigSmallResult'
+                numberResult: selectedNumber, // Assuming 'selectedNumber' corresponds to 'numberResult'
+                colorResult: color, // Assuming 'color' corresponds to 'colorResult'
+                currCycleId: cycleId
+            });
+
+            // Calculate the remaining time to wait for 29 seconds
+            const remainingTime = 28 * 1000 - elapsedTime;
+
+            // Log when the `addMoney` function will be triggered
+            console.log(`addMoney will run for cycle ${cycleId} after ${remainingTime} ms`);
+
+            // Run the `addMoney` function after 29 seconds if the request was made before 28 seconds
+            setTimeout(async () => {
+                await addMoney(WingoThreeBet);
+                console.log("Bets processed and money added.");
+            }, remainingTime);
+
+            req.flash("success", "Your bets have been registered. Results will be processed shortly.");
+            return res.redirect("/wingoresult"); // Redirect or take appropriate action
+        }
+    } catch (error) {
+        console.error("Error processing the result:", error);
+        req.flash("error", "An error occurred while processing the request.");
+        return res.redirect("/admin/wingooneresult");
+    }
+});
+
 
 // routes 
 app.use("/signup", signupRouter);
@@ -102,10 +191,7 @@ app.get("/", (req, res) => {
 app.get("/home", (req, res) => {
     res.render("home/index.ejs");
 });
-async function resetResultDb() {
-    await WingoBetResult.deleteMany({});
-    // console.log("reseted the result db");
-}
+
 app.use("/wingo", wingoRouter);//wingo game and bet request
 async function initializeCycle() {
     try {
@@ -117,9 +203,9 @@ async function initializeCycle() {
         // Create the first cycle with the format YYYYMMDD01
         const now = new Date();
         const year = now.getFullYear().toString();
-        const month = String(now.getMonth() + 1).padStart(2, '0'); 
-        const day = String(now.getDate()).padStart(2, '0'); 
-        const initialCycleId = `${year}${month}${day}01`; 
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const initialCycleId = `${year}${month}${day}01`;
         // Create and save the initial cycle
         const newCycle = new Cycle({
             cycleId: initialCycleId,
@@ -134,50 +220,49 @@ async function initializeCycle() {
     }
 }
 
-// Function to fetch the current cycle
-async function fetchCurrentCycleData() {
-    return await Cycle.findOne().sort({ createdAt: -1 }).exec(); // Get the most recent cycle
-}
 
 // Function to declare the game result
 async function declareGameResult(cycleId) {
     let WingoThreebet;
     try {
         // Fetch result from resultRule
-        const rule = await resultRule(); // Assuming resultRule returns { numberResults, colorResults, sizeResults }
-        // Extract the arrays from the rule object
-        const { numberResults, colorResults, sizeResults, WingoThreeBet } = rule;
-        WingoThreebet = WingoThreeBet;
-        // Utility function to select a result
-        function selectResult(resultsArray) {
-            // Find all results with 0 bet amount
-            const zeroAmountResults = resultsArray.filter(res => res.totalAmount === 0);
-            if (zeroAmountResults.length > 0) {
-                // Randomly select one from the zeroAmountResults
-                return zeroAmountResults[Math.floor(Math.random() * zeroAmountResults.length)].choosedBet;
-            } else {
-                // Otherwise, find the result with the least bet amount
-                return resultsArray.reduce((min, current) => {
-                    return (min.totalAmount < current.totalAmount) ? min : current;
-                }).choosedBet;
+        const result = await WingoBetResult.findOne({ currCycleId: cycleId });
+        if (!result) {
+            console.log(cycleId, "cyle id of declare result")
+            const rule = await resultRule(); // Assuming resultRule returns { numberResults, colorResults, sizeResults }
+            // Extract the arrays from the rule object
+            const { numberResults, colorResults, sizeResults, WingoThreeBet } = rule;
+            WingoThreebet = WingoThreeBet;
+            // Utility function to select a result
+            function selectResult(resultsArray) {
+                // Find all results with 0 bet amount
+                const zeroAmountResults = resultsArray.filter(res => res.totalAmount === 0);
+                if (zeroAmountResults.length > 0) {
+                    // Randomly select one from the zeroAmountResults
+                    return zeroAmountResults[Math.floor(Math.random() * zeroAmountResults.length)].choosedBet;
+                } else {
+                    // Otherwise, find the result with the least bet amount
+                    return resultsArray.reduce((min, current) => {
+                        return (min.totalAmount < current.totalAmount) ? min : current;
+                    }).choosedBet;
+                }
             }
+            // Select the result for each category using the utility function
+            numberResult = selectResult(numberResults);
+            colorResult = selectResult(colorResults);
+            bigSmallResult = selectResult(sizeResults);
+            // Save the result to the database
+            const result = await WingoBetResult.create({
+                bigSmallResult,
+                numberResult,
+                colorResult,
+                currCycleId: cycleId
+            });
+            await addMoney(WingoThreeBet);
         }
-        // Select the result for each category using the utility function
-        numberResult = selectResult(numberResults);
-        colorResult = selectResult(colorResults);
-        bigSmallResult = selectResult(sizeResults);
-        // Save the result to the database
-        const result = await WingoBetResult.create({
-            bigSmallResult,
-            numberResult,
-            colorResult,
-            currCycleId: cycleId
-        });
-        await addMoney(WingoThreeBet);
         // Notify clients of the result
         notifyClients(); // Your WebSocket or client notification logic
         // console.log('Result declared for cycle:', cycleId, result);
-
     } catch (error) {
         // Function to generate a random number between 1 and 3
         function getRandomNumber1To3() {
@@ -211,7 +296,7 @@ async function declareGameResult(cycleId) {
             default:
                 colorResult = 'yellow'; // Fallback, if needed
         }
-        
+
         const result = await WingoBetResult.create({
             bigSmallResult,
             numberResult,
@@ -277,20 +362,11 @@ async function calculateWinnings(bets, latestResult) {
 }
 
 
-// remove 
 function notifyClients() {
     WingoBetResult.find({})
-        .then(results => {
-            // Sort results based on the last three digits of cycleId
-            results.sort((a, b) => {
-                const aCycleNum = parseInt(a.currCycleId.slice(-3));
-                const bCycleNum = parseInt(b.currCycleId.slice(-3));
-                return bCycleNum - aCycleNum; // Sort in descending order
-            });
-
-            // Limit to the most recent 10 results
-            const recentResults = results.slice(0, 10);
-
+        .sort({ currCycleId: -1 }) // Sort by currCycleId in descending order
+        .limit(10) // Limit the results to 10
+        .then(recentResults => {
             // Send to all clients
             wss.clients.forEach(client => {
                 if (client.readyState === WebSocket.OPEN) {
@@ -299,7 +375,7 @@ function notifyClients() {
             });
         })
         .catch(err => {
-            console.error("Error fetching results for clients:", err);
+            console.error("Error fetching recent results for clients:", err);
         });
 }
 
@@ -307,10 +383,7 @@ app.get("/result", (req, res) => {
     res.render("temp.ejs");
 })
 
-// Function to calculate when to declare the result (createdAt + 30 seconds)
-function calculateResultTime(createdAt) {
-    return new Date(createdAt.getTime() + 30 * 1000); // Add 30 seconds to createdAt
-}
+
 
 // Main function to handle automatic result generation and cycle checking
 function handleCycleResult() {
@@ -326,13 +399,11 @@ function handleCycleResult() {
             console.log(`Result will be declared for cycle ${cycleId} at ${resultTime}`);
             // Wait until the result declaration time
             setTimeout(() => {
-
                 // Declare the result for the current cycle
                 declareGameResult(cycleId);
                 // Wait 5 seconds after declaring result to confirm next cycle has started
                 setTimeout(() => {
                     // console.log(`Checking for the next cycle after 5 seconds...`);
-
                     // Check for the next cycle after 5 seconds
                     handleCycleResult(); // Recursive call to handle the next cycle
                 }, 5000); // Wait 5 seconds to confirm next cycle
@@ -472,15 +543,15 @@ app.get("/logout", (req, res) => {
     })
 });
 
-app.get("/help",async(req,res)=>{
+app.get("/help", async (req, res) => {
     try {
         const info = await Info.findOne(); // Fetch the Info document
         if (!info) {
             return res.status(404).render('error', { message: 'Info not found' });
         }
         const telegramLink = info.telegramLink;
-        res.render("help/help-center.ejs",{telegramLink});
-    }catch (error){
+        res.render("help/help-center.ejs", { telegramLink });
+    } catch (error) {
         console.error('Error fetching QR code:', error);
         res.status(500).render('error', { message: 'Internal server error' });
     }

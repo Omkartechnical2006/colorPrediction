@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Color Prediction Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .container {
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
+            padding: 20px;
+            background-color: #00DBDE;
+            background-image: linear-gradient(90deg, #00DBDE 0%, #FC00FF 100%);
+            border-radius: 10px;
+            margin-bottom: 100px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .div-group {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        label {
+            margin-right: 20px;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 10px;
+            background-color: #ddd;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        /* Styles for Big and Small */
+        .big-selected {
+            background-color: #dd9138 !important;
+            background-image: linear-gradient(to right top, #dd9138, #dda624, #d5bc06, #c4d300, #a8eb12) !important;
+        }
+
+        .small-selected {
+            background-color: #5088d3 !important;
+        }
+
+        /* Styles for Colors */
+        .green-selected {
+            background-color: #17b15e !important;
+        }
+
+        .violet-selected {
+            background-color: #9b48db !important;
+        }
+
+        .red-selected {
+            background-color: #d23838 !important;
+        }
+
+        /* Number Grid Styling */
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 60px); /* 4 items per row */
+            grid-gap: 20px; /* Gap between items */
+            justify-content: center;
+        }
+
+        .circle {
+            width: 60px;
+            height: 60px;
+            background-color: #ddd;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out, transform 0.3s ease;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .circle:hover {
+            background-color: #ccc;
+            transform: scale(1.1);
+        }
+
+        .circle.selected {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        /* Animation on Page Load */
+        .circle {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .circle.fade-in {
+            opacity: 1;
+            transform: translateY(0);
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Wingo One Result Edit</h1>
+    <%-include("../partials/flash.ejs")%>
+    <div class="container">
+        <!-- Form to submit selection -->
+        <form action="/admin/wingooneresult" method="POST">
+            <!-- Color Selection -->
+            <div class="div-group">
+                <h3>Select a Color</h3>
+                <input type="radio" id="green" name="color" value="green">
+                <label for="green" class="animated color-option" id="green-label">Green</label>
+
+                <input type="radio" id="violet" name="color" value="violet">
+                <label for="violet" class="animated color-option" id="violet-label">Violet</label>
+
+                <input type="radio" id="red" name="color" value="red">
+                <label for="red" class="animated color-option" id="red-label">Red</label>
+            </div>
+
+            <!-- Size Selection -->
+            <div class="div-group">
+                <h3>Select Size</h3>
+                <input type="radio" id="big" name="size" value="big">
+                <label for="big" class="animated size-option" id="big-label">Big</label>
+
+                <input type="radio" id="small" name="size" value="small">
+                <label for="small" class="animated size-option" id="small-label">Small</label>
+            </div>
+
+            <!-- Number Selection -->
+            <div class="div-group">
+                <h3>Select a Number</h3>
+                <div class="number-grid">
+                    <!-- 0-9 Circular Number Buttons in a 4x4 grid layout with gaps -->
+                    <div class="circle" data-number="0">0</div>
+                    <div class="circle" data-number="1">1</div>
+                    <div class="circle" data-number="2">2</div>
+                    <div class="circle" data-number="3">3</div>
+                    <div class="circle" data-number="4">4</div>
+                    <div class="circle" data-number="5">5</div>
+                    <div class="circle" data-number="6">6</div>
+                    <div class="circle" data-number="7">7</div>
+                    <div class="circle" data-number="8">8</div>
+                    <div class="circle" data-number="9">9</div>
+                </div>
+                <!-- Hidden input to store the selected number -->
+                <input type="hidden" name="selectedNumber" id="selectedNumber">
+            </div>
+
+            <!-- Submit Button -->
+             <div style="text-align: center;">
+            <button type="submit">Submit</button>
+        </div>
+        </form>
+        <%-include("../partials/noChangeFooter.ejs")%>
+    </div>
+
+    <script>
+        let selectedNumber = null;
+        // Handle number selection
+        const circles = document.querySelectorAll('.circle');
+        circles.forEach((circle, index) => {
+            // Delay the fade-in animation based on the index of the circle
+            setTimeout(() => {
+                circle.classList.add('fade-in');
+            }, index * 100);
+
+            circle.addEventListener('click', () => {
+                // Remove 'selected' class from all circles
+                circles.forEach(c => c.classList.remove('selected'));
+
+                // Add 'selected' class to clicked circle
+                circle.classList.add('selected');
+                selectedNumber = circle.getAttribute('data-number');
+                document.getElementById('selectedNumber').value = selectedNumber;
+            });
+        });
+
+        // Handle size selection (Big or Small)
+        const bigLabel = document.getElementById('big-label');
+        const smallLabel = document.getElementById('small-label');
+
+        document.getElementById('big').addEventListener('change', function() {
+            bigLabel.classList.add('big-selected');
+            smallLabel.classList.remove('small-selected');
+        });
+
+        document.getElementById('small').addEventListener('change', function() {
+            smallLabel.classList.add('small-selected');
+            bigLabel.classList.remove('big-selected');
+        });
+
+        // Handle color selection (Green, Violet, Red)
+        const greenLabel = document.getElementById('green-label');
+        const violetLabel = document.getElementById('violet-label');
+        const redLabel = document.getElementById('red-label');
+
+        document.getElementById('green').addEventListener('change', function() {
+            greenLabel.classList.add('green-selected');
+            violetLabel.classList.remove('violet-selected');
+            redLabel.classList.remove('red-selected');
+        });
+
+        document.getElementById('violet').addEventListener('change', function() {
+            violetLabel.classList.add('violet-selected');
+            greenLabel.classList.remove('green-selected');
+            redLabel.classList.remove('red-selected');
+        });
+
+        document.getElementById('red').addEventListener('change', function() {
+            redLabel.classList.add('red-selected');
+            greenLabel.classList.remove('green-selected');
+            violetLabel.classList.remove('violet-selected');
+        });
+    </script>
+</body>
+</html>
