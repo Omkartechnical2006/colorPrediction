@@ -215,47 +215,50 @@
         let beepAudio = new Audio('audio/beep.mp3'); // Load your beep audio file
         let endAudio = new Audio('audio/end.mp3'); // Load your end audio file
         let beepInterval;
-
         window.onload = () => {
             // Establish WebSocket connection
             ws = new WebSocket('ws://localhost:8080');
-
+    
             ws.onmessage = (event) => {
-                const results = JSON.parse(event.data);
-                displayResults(results);
-                console.log("displayresutls",displayResults(results));
                 const data = JSON.parse(event.data);
-                console.log("data: ",data)
+                console.log("Received data:", data);
+    
+                // Display the results
+                if (Array.isArray(data)) {
+                    displayResults(data);  // Only call if `data` is the results array
+                }
+    
                 const timeLeft = data.timeLeft.toString().padStart(2, '0'); // Ensure two digits
                 const firstDigit = timeLeft[0]; // First digit
                 const secondDigit = timeLeft[1]; // Second digit
-
+    
                 // Update displayed digits
                 document.getElementById('firstDigit').innerText = firstDigit;
                 document.getElementById('secondDigit').innerText = secondDigit;
-                // document.getElementById('cycleCount').innerText = "Cycle Count: " + data.cycleCount;
-                document.getElementById('cycleId').innerText = data.cycleId; // Update cycle ID
-                // Update class names for the divs
-                const firstDiv = document.getElementById('firstDigitDiv'); // Use specific IDs
-                const secondDiv = document.getElementById('secondDigitDiv'); // Use specific IDs
-
+    
+                // Update cycle ID
+                document.getElementById('cycleId').innerText = data.cycleId;
+    
                 // Update class names based on the current digits
+                const firstDiv = document.getElementById('firstDigitDiv');
+                const secondDiv = document.getElementById('secondDigitDiv');
                 firstDiv.className = `n${firstDigit}`;
                 secondDiv.className = `n${secondDigit}`;
-                // choice of person disabled on 5sec 
+    
+                // Disable choice between 5 and 1 seconds
                 let choice = document.getElementById("choose-choice");
-                // overlay b/w 5 to 1
                 const overlayTimer = document.getElementById('overlayTimer');
-                // Play beep sound from 5 to 1
+    
                 if (data.timeLeft > 1 && data.timeLeft <= 5) {
                     choice.classList.add("disabled");
                     overlayTimer.innerText = data.timeLeft;
                     overlayTimer.style.display = 'block';
+    
                     if (!beepInterval) {
                         beepInterval = setInterval(() => {
                             beepAudio.currentTime = 0; // Reset audio to start
                             beepAudio.play();
-                        }, 1000); // Play every second
+                        }, 1000); // Play beep every second
                     }
                 } else if (data.timeLeft === 0) {
                     clearInterval(beepInterval); // Stop beep sound
@@ -264,42 +267,48 @@
                     overlayTimer.style.display = 'none';
                     choice.classList.remove("disabled");
                 } else {
-                    clearInterval(beepInterval); // Stop playing when above 5
-                    beepInterval = null; // Reset interval
+                    // Clear beep interval if the time is above 5 seconds
+                    clearInterval(beepInterval);
+                    beepInterval = null;
                 }
             };
+    
+            ws.onclose = () => {
+                console.log('WebSocket connection closed');
+            };
+    
+            // Function to display game results
             function displayResults(results) {
-                 const resultsDiv = document.getElementById('results');
+                const resultsDiv = document.getElementById('results');
+    
                 // Ensure results is an array
                 if (!Array.isArray(results)) {
                     console.error('Expected results to be an array, but received:', results);
                     return;
                 }
+    
                 resultsDiv.innerHTML = ''; // Clear previous results
                 results.forEach(result => {
-                    resultsDiv.innerHTML += `<div data-v-481307ec="" class="van-row">
-                        <div data-v-481307ec="" class="van-col van-col--8">${result.currCycleId}</div>
-                        <div data-v-481307ec="" class="van-col van-col--5 numcenter">
-                        <div data-v-481307ec="" class="GameRecord__C-body-num  ${result.colorResult}">${result.numberResult}</div>
-                        </div>
-                        <div data-v-481307ec="" class="van-col van-col--5">
-                            <span data-v-481307ec="">${result.bigSmallResult}</span>
+                    resultsDiv.innerHTML += `
+                        <div data-v-481307ec="" class="van-row">
+                            <div data-v-481307ec="" class="van-col van-col--8">${result.currCycleId}</div>
+                            <div data-v-481307ec="" class="van-col van-col--5 numcenter">
+                                <div data-v-481307ec="" class="GameRecord__C-body-num ${result.colorResult}">${result.numberResult}</div>
                             </div>
-                        <div data-v-481307ec="" class="van-col van-col--6">
-                        <div data-v-481307ec="" class="GameRecord__C-origin">
-                        <div data-v-481307ec="" class="GameRecord__C-origin-I ${result.colorResult}"></div>
-                        </div>
-                        </div>
+                            <div data-v-481307ec="" class="van-col van-col--5">
+                                <span data-v-481307ec="">${result.bigSmallResult}</span>
+                            </div>
+                            <div data-v-481307ec="" class="van-col van-col--6">
+                                <div data-v-481307ec="" class="GameRecord__C-origin">
+                                    <div data-v-481307ec="" class="GameRecord__C-origin-I ${result.colorResult}"></div>
+                                </div>
+                            </div>
                         </div>`;
                 });
             }
-            ws.onclose = () => {
-                console.log('WebSocket connection closed');
-            };
         };
     </script>
-</head>
-
+    </head>
 <body style="font-size: 12px;">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
         style="position: absolute; width: 0; height: 0">
@@ -312,15 +321,13 @@
                 fill="var(--main-color)"></path>
         </symbol>
     </svg>
-
     <div id="app" data-v-app="">
         <%-include("../partials/flash.ejs")%>
             <div data-v-647954c7="" class="ar-loading-view"
                 style="display: none; --f13b4d11-currentFontFamily: Roboto, Inter, sans-serif;">
                 <div data-v-647954c7="" class="loading-wrapper"><!-- <VanLoading /> -->
-
                 </div>
-                <div data-v-647954c7="" class="skeleton-wrapper" style="display: none;">
+                <div data-v-647954c7="" class="skeleton-wrapper" style="display: block;">
                     <div data-v-647954c7="" class="van-skeleton van-skeleton--animate"><!---->
                         <div class="van-skeleton__content"><!---->
                             <div class="van-skeleton-paragraph" style="width: 100%;"></div>
@@ -357,7 +364,7 @@
                         </div>
                     </div>
                 </div>
-            </div><!--v-if-->
+            </div>v-if
             <div data-v-5d71c3fd="" class="WinGo__C" style="--f13b4d11-currentFontFamily: Roboto, Inter, sans-serif;">
                 <div data-v-12a80a3e="" data-v-5d71c3fd="" class="navbar main">
                     <div data-v-12a80a3e="" class="navbar-fixed">
@@ -413,7 +420,8 @@
                     </div><button class="hotIcon">Detail</button>
                 </div><!-- 游戏类型 -->
                 <!-- gameslist  -->
-                <!-- include gamelist.ejs from partials  -->
+                <!-- include gameslist.ejs from partials  -->
+                 <!-- include("../partials/gameslist.ejs") -->
                 <!-- 游戏开始时间倒计时 -->
                 <div data-v-3e4c6499="" class="TimeLeft__C">
                     <div data-v-3e4c6499="" class="TimeLeft__C-rule"><svg data-v-3e4c6499=""
