@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en" translate="no" data-dpr="1" dir="ltr" style="font-size: 54px;">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="icon" type="image/svg+xml"
+        href="https://ossimg.big-mumadmin888.com/bigmumbai/other/h5setting_20230814170913idlb.ico">
+    <meta name="google" content="notranslate">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Big Mumbai</title>
+    <!-- result style  -->
+    <link rel="stylesheet" href="css/games/wingo/modules-b642e9bc.css">
+
+    <link rel="stylesheet" href="css/games/wingo/page-activity-15aec14d.css">
+    <link rel="stylesheet" href="css/games/wingo/page-home-38001cf0.css">
+    <script src="js/games/wingo/script.js"></script>
+    <!-- main styles like color of body  -->
+    <link rel="stylesheet" href="css/games/wingo/index-688293f8.css">
+    <style>
+        /* Hide scrollbar for Chrome, Safari, and Edge */
+        #results::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge, and Firefox */
+        #results {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        @media only screen and (max-width: 495px) {
+            .Betting__C-multiple-l {
+                display: none;
+            }
+
+            .TimeLeft__C-id {
+                font-size: medium !important;
+            }
+
+            .noticeBar__container-body-text {
+                font-size: small !important;
+            }
+
+            .Wallet__C-balance-l3 div {
+                font-size: medium !important;
+                width: 2.96667rem !important;
+            }
+
+            .van-row {
+                font-size: medium !important;
+            }
+
+            .GameRecord__C-body .van-row {
+                font-size: small !important;
+            }
+
+            .GameRecord__C-body-num {
+                font-size: medium !important;
+            }
+
+            .hotIcon {
+                font-size: small !important;
+                padding: 0 !important;
+            }
+
+            .Betting__C-multiple-r {
+                font-size: small !important;
+                padding: 3px !important;
+            }
+        }
+
+        @media only screen and (max-width: 425px) {
+            .TimeLeft__C-rule {
+                display: none !important;
+            }
+        }
+
+        .Betting__C-numC {
+            overflow-y: scroll;
+            /* Enable scrolling */
+            gap: 2px !important;
+            scrollbar-width: none;
+            /* For Firefox */
+            -ms-overflow-style: none;
+            /* For Internet Explorer and Edge */
+        }
+
+        .disabled {
+            opacity: 0.5;
+            /* Make it look disabled */
+            pointer-events: none;
+            /* Prevent mouse interactions */
+        }
+
+        .Betting__C-numC::-webkit-scrollbar {
+            display: none;
+            /* For Chrome, Safari, and Opera */
+        }
+        .green{
+            color: green!important;
+        }
+        .red{
+            color: #d23838!important;
+        }
+        .violet{
+            color: #9b48db!important;
+        }
+
+        .n0 {
+            background-image: url('images/games/wingo/n0-30bd92d1.png') !important;
+        }
+
+        .n1 {
+            background-image: url('images/games/wingo/n1-dfccbff5.png') !important;
+        }
+
+        .n2 {
+            background-image: url('images/games/wingo/n2-c2913607.png') !important;
+        }
+
+        .n3 {
+            background-image: url('images/games/wingo/n3-f92c313f.png') !important;
+        }
+
+        .n4 {
+            background-image: url('images/games/wingo/n4-cb84933b.png') !important;
+        }
+
+        .n5 {
+            background-image: url('images/games/wingo/n5-49d0e9c5.png') !important;
+        }
+
+        .n6 {
+            background-image: url('images/games/wingo/n6-a56e0b9a.png') !important;
+        }
+
+        .n7 {
+            background-image: url('images/games/wingo/n7-5961a17f.png') !important;
+        }
+
+        .n8 {
+            background-image: url('images/games/wingo/n8-d4d951a4.png') !important;
+        }
+
+        .n9 {
+            background-image: url('images/games/wingo/n9-a20f6f42.png') !important;
+        }
+
+        .Betting__C-numC-item0 {
+            background-image: url('images/games/wingo/n0-30bd92d1.png') !important;
+        }
+
+        .Betting__C-numC-item1 {
+            background-image: url('images/games/wingo/n1-dfccbff5.png') !important;
+        }
+
+        .Betting__C-numC-item2 {
+            background-image: url('images/games/wingo/n2-c2913607.png') !important;
+
+        }
+
+        .Betting__C-numC-item3 {
+            background-image: url('images/games/wingo/n3-f92c313f.png') !important;
+        }
+
+        .Betting__C-numC-item4 {
+            background-image: url('images/games/wingo/n4-cb84933b.png') !important;
+
+        }
+
+        .Betting__C-numC-item5 {
+            background-image: url('images/games/wingo/n5-49d0e9c5.png') !important;
+        }
+
+        .Betting__C-numC-item6 {
+            background-image: url('images/games/wingo/n6-a56e0b9a.png') !important;
+
+        }
+
+        .Betting__C-numC-item7 {
+            background-image: url('images/games/wingo/n7-5961a17f.png') !important;
+        }
+
+        .Betting__C-numC-item8 {
+            background-image: url('images/games/wingo/n8-d4d951a4.png') !important;
+        }
+
+        .Betting__C-numC-item9 {
+
+            background-image: url('images/games/wingo/n9-a20f6f42.png') !important;
+        }
+
+        .GameList__C-item {
+            background-image: url('images/games/wingo/time-d2b95809.png');
+            background-size: 1.17333rem;
+            background-position: center .18667rem;
+            background-repeat: no-repeat;
+        }
+
+        #overlayTimer {
+            position: absolute;
+            display: none;
+            color: white;
+            top: 20%;
+            left: 50%;
+            font-weight: bolder;
+            font-size: 8em;
+            transform: translateX(-50%);
+            z-index: 10;
+            padding: 10px;
+        }
+    </style>
+    <script>
+        let ws;
+        let beepAudio = new Audio('audio/beep.mp3'); // Load your beep audio file
+        let endAudio = new Audio('audio/end.mp3'); // Load your end audio file
+        let beepInterval;
+
+        window.onload = () => {
+            // Establish WebSocket connection
+            ws = new WebSocket('ws://localhost:8080');
+
+            ws.onmessage = (event) => {
+                const results = JSON.parse(event.data);
+                displayResults(results);
+                console.log("displayresutls",displayResults(results));
+                const data = JSON.parse(event.data);
+                console.log("data: ",data)
+                const timeLeft = data.timeLeft.toString().padStart(2, '0'); // Ensure two digits
+                const firstDigit = timeLeft[0]; // First digit
+                const secondDigit = timeLeft[1]; // Second digit
+
+                // Update displayed digits
+                document.getElementById('firstDigit').innerText = firstDigit;
+                document.getElementById('secondDigit').innerText = secondDigit;
+                // document.getElementById('cycleCount').innerText = "Cycle Count: " + data.cycleCount;
+                document.getElementById('cycleId').innerText = data.cycleId; // Update cycle ID
+                // Update class names for the divs
+                const firstDiv = document.getElementById('firstDigitDiv'); // Use specific IDs
+                const secondDiv = document.getElementById('secondDigitDiv'); // Use specific IDs
+
+                // Update class names based on the current digits
+                firstDiv.className = `n${firstDigit}`;
+                secondDiv.className = `n${secondDigit}`;
+                // choice of person disabled on 5sec 
+                let choice = document.getElementById("choose-choice");
+                // overlay b/w 5 to 1
+                const overlayTimer = document.getElementById('overlayTimer');
+                // Play beep sound from 5 to 1
+                if (data.timeLeft > 1 && data.timeLeft <= 5) {
+                    choice.classList.add("disabled");
+                    overlayTimer.innerText = data.timeLeft;
+                    overlayTimer.style.display = 'block';
+                    if (!beepInterval) {
+                        beepInterval = setInterval(() => {
+                            beepAudio.currentTime = 0; // Reset audio to start
+                            beepAudio.play();
+                        }, 1000); // Play every second
+                    }
+                } else if (data.timeLeft === 0) {
+                    clearInterval(beepInterval); // Stop beep sound
+                    beepInterval = null; // Reset interval
+                    endAudio.play(); // Play end sound
+                    overlayTimer.style.display = 'none';
+                    choice.classList.remove("disabled");
+                } else {
+                    clearInterval(beepInterval); // Stop playing when above 5
+                    beepInterval = null; // Reset interval
+                }
+            };
+            function displayResults(results) {
+                 const resultsDiv = document.getElementById('results');
+                // Ensure results is an array
+                if (!Array.isArray(results)) {
+                    console.error('Expected results to be an array, but received:', results);
+                    return;
+                }
+                resultsDiv.innerHTML = ''; // Clear previous results
+                results.forEach(result => {
+                    resultsDiv.innerHTML += `<div data-v-481307ec="" class="van-row">
+                        <div data-v-481307ec="" class="van-col van-col--8">${result.currCycleId}</div>
+                        <div data-v-481307ec="" class="van-col van-col--5 numcenter">
+                        <div data-v-481307ec="" class="GameRecord__C-body-num  ${result.colorResult}">${result.numberResult}</div>
+                        </div>
+                        <div data-v-481307ec="" class="van-col van-col--5">
+                            <span data-v-481307ec="">${result.bigSmallResult}</span>
+                            </div>
+                        <div data-v-481307ec="" class="van-col van-col--6">
+                        <div data-v-481307ec="" class="GameRecord__C-origin">
+                        <div data-v-481307ec="" class="GameRecord__C-origin-I ${result.colorResult}"></div>
+                        </div>
+                        </div>
+                        </div>`;
+                });
+            }
+            ws.onclose = () => {
+                console.log('WebSocket connection closed');
+            };
+        };
+    </script>
+</head>
+
+<body style="font-size: 12px;">
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+        style="position: absolute; width: 0; height: 0">
+        <symbol id="icon-lottyWallet" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path opacity="0.5"
+                d="M24.7493 6.58594L24.7494 23.2826H10.4327C6.98268 23.2826 4.16602 26.0993 4.16602 29.5493V13.0693C4.16602 11.0859 5.38268 9.31927 7.23268 8.61927L20.466 3.61927C22.5327 2.8526 24.7493 4.36927 24.7493 6.58594ZM37.5977 23.2826V26.7159C37.5977 27.6326 36.8643 28.3826 35.931 28.4159H32.6643C30.8643 28.4159 29.2143 27.0993 29.0643 25.2993C28.9643 24.2493 29.3643 23.2659 30.0643 22.5826C30.681 21.9493 31.531 21.5826 32.4643 21.5826H35.931C36.8643 21.6159 37.5977 22.3659 37.5977 23.2826Z"
+                fill="var(--main-color)"></path>
+            <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M29.066 25.2993C28.966 24.2493 29.366 23.266 30.066 22.5827C30.6827 21.9493 31.5327 21.5827 32.466 21.5827H35.8327V19.1827C35.8327 15.7327 33.016 12.916 29.566 12.916H10.4327C6.98268 12.916 4.16602 15.7327 4.16602 19.1827V30.3993C4.16602 33.8493 6.98268 36.666 10.4327 36.666H29.566C33.016 36.666 35.8327 33.8493 35.8327 30.3993V28.416H32.666C30.866 28.416 29.216 27.0993 29.066 25.2993ZM22.4167 22.5H10.75C10.0667 22.5 9.5 21.9333 9.5 21.25C9.5 20.5667 10.0667 20 10.75 20H22.4167C23.1 20 23.6667 20.5667 23.6667 21.25C23.6667 21.9333 23.1 22.5 22.4167 22.5Z"
+                fill="var(--main-color)"></path>
+        </symbol>
+    </svg>
+
+    <div id="app" data-v-app="">
+        <%-include("../partials/flash.ejs")%>
+            <div data-v-647954c7="" class="ar-loading-view"
+                style="display: none; --f13b4d11-currentFontFamily: Roboto, Inter, sans-serif;">
+                <div data-v-647954c7="" class="loading-wrapper"><!-- <VanLoading /> -->
+
+                </div>
+                <div data-v-647954c7="" class="skeleton-wrapper" style="display: none;">
+                    <div data-v-647954c7="" class="van-skeleton van-skeleton--animate"><!---->
+                        <div class="van-skeleton__content"><!---->
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" stylcls e="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 60%;"></div>
+                        </div>
+                    </div>
+                    <div data-v-647954c7="" class="van-skeleton van-skeleton--animate">
+                        <div class="van-skeleton-avatar van-skeleton-avatar--round"></div>
+                        <div class="van-skeleton__content">
+                            <h3 class="van-skeleton-title"></h3>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 60%;"></div>
+                        </div>
+                    </div>
+                    <div data-v-647954c7="" class="van-skeleton van-skeleton--animate"><!---->
+                        <div class="van-skeleton__content">
+                            <h3 class="van-skeleton-title"></h3>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 60%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div><!--v-if-->
+            <div data-v-5d71c3fd="" class="WinGo__C" style="--f13b4d11-currentFontFamily: Roboto, Inter, sans-serif;">
+                <div data-v-12a80a3e="" data-v-5d71c3fd="" class="navbar main">
+                    <div data-v-12a80a3e="" class="navbar-fixed">
+                        <div data-v-12a80a3e="" class="navbar__content">
+                            <div data-v-12a80a3e="" class="navbar__content-left" onclick="window.location.href='/home'">
+                                <i data-v-12a80a3e=""
+                                    class="van-badge__wrapper van-icon van-icon-arrow-left"><!----><!----><!----></i>
+                            </div>
+                            <div data-v-12a80a3e="" class="navbar__content-center">
+                                <div data-v-12a80a3e="" class="headLogo"
+                                    style="background-image: url('https://i.postimg.cc/rpSyhHYW/pixlr-image-generator-99a4fb45-53fa-464e-8f92-a4402c67fe4d.webp');">
+                                </div>
+                                <div data-v-12a80a3e="" class="navbar__content-title"></div>
+                            </div>
+                            <div data-v-12a80a3e="" class="navbar__content-right">
+                                <div data-v-5d71c3fd="" class="WinGo__C-head-more">
+                                    <div data-v-5d71c3fd=""></div>
+                                    <div data-v-5d71c3fd="" class=""></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- 钱包余额 -->
+                <div data-v-7dd1adab="" data-v-5d71c3fd="" class="Wallet__C">
+                    <div data-v-7dd1adab="" class="Wallet__C-balance">
+                        <div data-v-7dd1adab="" class="Wallet__C-balance-l1">
+                            <div data-v-7dd1adab="">₹<%=balance%>.00</div>
+                        </div>
+                        <div data-v-7dd1adab="" class="Wallet__C-balance-l2"><svg data-v-7dd1adab=""
+                                class="svg-icon icon-lottyWallet">
+                                <use xlink:href="#icon-lottyWallet"></use>
+                            </svg>
+                            <div data-v-7dd1adab="">Wallet balance</div>
+                        </div>
+                        <div data-v-7dd1adab="" class="Wallet__C-balance-l3">
+                            <div onclick="window.location.href='/main/Withdraw'" data-v-7dd1adab="">Withdraw</div>
+                            <div data-v-7dd1adab="" onclick="window.location.href='/main/recharge'">Deposit</div>
+                        </div>
+                    </div>
+                </div>
+                <div data-v-5d71c3fd="" class="noticeBar__container lottery-notice"><svg
+                        class="svg-icon icon-noticeBarSpeaker">
+                        <use xlink:href="#icon-noticeBarSpeaker"></use>
+                    </svg>
+                    <div class="noticeBar__container-body">
+                        <div class="noticeBar__container-body-text">If your deposit not receive, please send it directly
+                            to
+                            Prince Games Self-service Center (@) wait till already get
+                            process, do not send to another person and trust anyone claiming to represent Tiranga Games.
+                            Always verify our website authenticity through the official community channels. Your safety
+                            and
+                            trust is our prority.</div>
+                    </div><button class="hotIcon">Detail</button>
+                </div><!-- 游戏类型 -->
+                <!-- gameslist  -->
+                <!-- include gamelist.ejs from partials  -->
+                <!-- 游戏开始时间倒计时 -->
+                <div data-v-3e4c6499="" class="TimeLeft__C">
+                    <div data-v-3e4c6499="" class="TimeLeft__C-rule"><svg data-v-3e4c6499=""
+                            xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+                            <path data-v-3e4c6499=""
+                                d="M23.67 3H12.33C6.66 3 5.25 4.515 5.25 10.56V27.45C5.25 31.44 7.44 32.385 10.095 29.535L10.11 29.52C11.34 28.215 13.215 28.32 14.28 29.745L15.795 31.77C17.01 33.375 18.975 33.375 20.19 31.77L21.705 29.745C22.785 28.305 24.66 28.2 25.89 29.52C28.56 32.37 30.735 31.425 30.735 27.435V10.56C30.75 4.515 29.34 3 23.67 3ZM11.67 18C10.845 18 10.17 17.325 10.17 16.5C10.17 15.675 10.845 15 11.67 15C12.495 15 13.17 15.675 13.17 16.5C13.17 17.325 12.495 18 11.67 18ZM11.67 12C10.845 12 10.17 11.325 10.17 10.5C10.17 9.675 10.845 9 11.67 9C12.495 9 13.17 9.675 13.17 10.5C13.17 11.325 12.495 12 11.67 12ZM24.345 17.625H16.095C15.48 17.625 14.97 17.115 14.97 16.5C14.97 15.885 15.48 15.375 16.095 15.375H24.345C24.96 15.375 25.47 15.885 25.47 16.5C25.47 17.115 24.96 17.625 24.345 17.625ZM24.345 11.625H16.095C15.48 11.625 14.97 11.115 14.97 10.5C14.97 9.885 15.48 9.375 16.095 9.375H24.345C24.96 9.375 25.47 9.885 25.47 10.5C25.47 11.115 24.96 11.625 24.345 11.625Z"
+                                fill="currentColor"></path>
+                        </svg>How to play</div>
+                    <div data-v-3e4c6499="" class="TimeLeft__C-name">Win Go 30s</div>
+                    <div data-v-3e4c6499="" class="TimeLeft__C-num">
+                        <div data-v-3e4c6499="" id="firstDigitDiv" class="n0"></div>
+                        <div data-v-3e4c6499="" id="secondDigitDiv" class="n0"></div>
+                    </div>
+                    <div data-v-3e4c6499="" class="TimeLeft__C-id" id="cycleId">00000000</div>
+                    <div data-v-3e4c6499="" class="TimeLeft__C-text">Time remaining</div>
+                    <div data-v-3e4c6499="" class="TimeLeft__C-time">
+                        <div data-v-3e4c6499="">0</div>
+                        <div data-v-3e4c6499="">0</div>
+                        <div data-v-3e4c6499="">:</div>
+                        <div data-v-3e4c6499="" id="firstDigit">3</div>
+                        <div data-v-3e4c6499="" id="secondDigit">0</div>
+                    </div>
+                </div><!-- 规则弹层 begin--><!-- 规则弹层 begin--><!----><!----><!-- 投注表 -->
+                <div data-v-4aca9bd1="" data-v-5d71c3fd="" class="Betting__C" voicetype="1" typeid="30">
+                    <div data-v-4aca9bd1="" class="Betting__C-mark" style="display: none">
+                        <div data-v-4aca9bd1="">1</div>
+                        <div data-v-4aca9bd1="">9</div>
+                    </div>
+                    <div data-v-4aca9bd1="" class="Betting__C-head">
+                        <div data-v-4aca9bd1="" class="Betting__C-head-g" onclick="popupshow(this)">Green</div>
+                        <div data-v-4aca9bd1="" class="Betting__C-head-p" onclick="popupshow(this)">Violet</div>
+                        <div data-v-4aca9bd1="" class="Betting__C-head-r" onclick="popupshow(this)">Red</div>
+                    </div>
+                    <div data-v-4aca9bd1="" style="display: relative!important;" id="choose-choice"
+                        class="Betting__C-numC">
+                        <div data-v-4aca9bd1="" class="Betting__C-numC-item0"></div>
+                        <div data-v-4aca9bd1="" class="Betting__C-numC-item1"></div>
+                        <div data-v-4aca9bd1="" class="Betting__C-numC-item2"></div>
+                        <div data-v-4aca9bd1="" class="Betting__C-numC-item3"></div>
+                        <div data-v-4aca9bd1="" class="Betting__C-numC-item4"></div>
+                        <div data-v-4aca9bd1="" class="Betting__C-numC-item5"></div>
+                        <div data-v-4aca9bd1="" class="Betting__C-numC-item6"></div>
+                        <div data-v-4aca9bd1="" class="Betting__C-numC-item7"></div>
+                        <div data-v-4aca9bd1="" class="Betting__C-numC-item8"></div>
+                        <div data-v-4aca9bd1="" class="Betting__C-numC-item9"></div>
+                        <!-- Overlay timer that appears from 5 seconds to 1 second -->
+                        <div id="overlayTimer">5</div>
+                    </div>
+                    <div data-v-4aca9bd1="" class="Betting__C-multiple">
+                        <div data-v-4aca9bd1="" class="Betting__C-multiple-l">Random</div>
+                        <div data-v-4aca9bd1="" class="Betting__C-multiple-r active"> X1</div>
+                        <div data-v-4aca9bd1="" class="Betting__C-multiple-r"> X5</div>
+                        <div data-v-4aca9bd1="" class="Betting__C-multiple-r"> X10</div>
+                        <div data-v-4aca9bd1="" class="Betting__C-multiple-r"> X20</div>
+                        <div data-v-4aca9bd1="" class="Betting__C-multiple-r"> X50</div>
+                        <div data-v-4aca9bd1="" class="Betting__C-multiple-r"> X100</div>
+                    </div>
+
+                    <div data-v-4aca9bd1="" class="Betting__C-foot">
+                        <div data-v-4aca9bd1="" class="Betting__C-foot-b" onclick="popupshow(this)">Big</div>
+                        <div data-v-4aca9bd1="" class="Betting__C-foot-s" onclick="popupshow(this)">Small</div>
+                    </div><!-- Betting content begin --><!----><!----><!-- 规则弹层 begin--><!----><!---->
+                </div>
+                <!-- Dynamically display the corresponding component -->
+                <div data-v-481307ec="" data-v-5d71c3fd="" class="GameRecord__C game-record"
+                    apifun="e=&gt;f(m.WinGoGetMyEmerdList,e).then(t=&gt;t.data)"
+                    listapi="e=&gt;f(m.WinGoGetNoaverageEmerdList,e).then(t=&gt;t.data)"
+                    emerdapi="e=&gt;f(m.WinGoGetEmerdList,e).then(t=&gt;t.data)"
+                    gopathname="AllLotteryGames-BettingRecordWin">
+                    <div data-v-481307ec="" class="GameRecord__C-head">
+                        <div data-v-481307ec="" class="van-row">
+                            <div data-v-481307ec="" class="van-col van-col--8">Period</div>
+                            <div data-v-481307ec="" class="van-col van-col--5">Number</div>
+                            <div data-v-481307ec="" class="van-col van-col--5">Big Small</div>
+                            <div data-v-481307ec="" class="van-col van-col--6">Color</div>
+                        </div>
+                    </div>
+                    <div data-v-481307ec="" class="GameRecord__C-body" id="results" style="overflow-y: scroll; max-height: 300px!important;">
+                        <!-- result will be declared here  -->
+                    </div>
+                    <div data-v-3e71d3da="" data-v-5d71c3fd="" class="dialog inactive">
+                        <div data-v-3e71d3da="" class="dialog__container" role="dialog" tabindex="0">
+                            <div data-v-3e71d3da="" class="dialog__container-img"><img data-v-3e71d3da="" class=""
+                                    alt="" data-origin="/assets/png/tip-2298bb83.png"
+                                    src="images/games/tip-2298bb83.png"></div>
+                            <div data-v-3e71d3da="" class="dialog__container-title">
+                                <h1 data-v-3e71d3da=""></h1>
+                            </div>
+                            <div data-v-3e71d3da="" class="dialog__container-content">
+                                <div data-v-5d71c3fd=""></div>
+                            </div>
+                            <div data-v-3e71d3da="" class="dialog__container-footer"><button
+                                    data-v-3e71d3da="">Confirm</button><button data-v-3e71d3da="">Cancel</button></div>
+                            <!--v-if-->
+                        </div>
+                        <div data-v-3e71d3da="" class="dialog__outside"></div>
+                    </div>
+                </div><!--online custom service-->
+            </div>
+            <!-- dialog for choose  -->
+            <%-include("../partials/popup-choose.ejs")%>
+                <!-- end  -->
+                <script>
+                    const bettingItems = document.querySelectorAll('.Betting__C-multiple-r');
+
+                    bettingItems.forEach(item => {
+                        item.addEventListener('click', () => {
+                            // Remove active class from all items
+                            bettingItems.forEach(i => i.classList.remove('active'));
+                            // Add active class to the clicked item
+                            item.classList.add('active');
+                        });
+                    });
+
+                </script>
+</body>
+
+</html>

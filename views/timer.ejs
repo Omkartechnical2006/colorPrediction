@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Timer</title>
+    <script>
+          let ws;
+        let beepAudio = new Audio('beep.mp3'); // Load your beep audio file
+        let endAudio = new Audio('end.mp3'); // Load your end audio file
+        let beepInterval;
+
+        window.onload = () => {
+            // Establish WebSocket connection
+            ws = new WebSocket('ws://localhost:8080');
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                const timeLeft = data.timeLeft.toString().padStart(2, '0'); // Ensure two digits
+                const firstDigit = timeLeft[0]; // First digit
+                const secondDigit = timeLeft[1]; // Second digit
+
+                // Update displayed digits
+                document.getElementById('firstDigit').innerText = firstDigit;
+                document.getElementById('secondDigit').innerText = secondDigit;
+                document.getElementById('cycleCount').innerText = "Cycle Count: " + data.cycleCount;
+                document.getElementById('cycleId').innerText = "Cycle ID: " + data.cycleId; // Update cycle ID
+
+                // Update class names
+                const firstDiv = document.querySelector('.n3'); // Select the first div
+                const secondDiv = document.querySelector('.n0'); // Select the second div
+
+                // Remove previous classes
+                firstDiv.className = `n${firstDigit}`;
+                secondDiv.className = `n${secondDigit}`;
+
+                // Play beep sound from 5 to 1
+                if (data.timeLeft > 0 && data.timeLeft <= 5) {
+                    if (!beepInterval) {
+                        beepInterval = setInterval(() => {
+                            beepAudio.currentTime = 0; // Reset audio to start
+                            beepAudio.play();
+                        }, 1000); // Play every second
+                    }
+                } else if (data.timeLeft === 0) {
+                    clearInterval(beepInterval); // Stop beep sound
+                    beepInterval = null; // Reset interval
+                    endAudio.play(); // Play end sound
+                } else {
+                    clearInterval(beepInterval); // Stop playing when above 5
+                    beepInterval = null; // Reset interval
+                }
+            };
+
+            ws.onclose = () => {
+                console.log('WebSocket connection closed');
+            };
+        };
+    </script>
+</head>
+<body>
+    <h1>Game Timer</h1>
+    <div>
+        <p>Time Left: 
+            <span id="firstDigit">0</span> 
+            <span id="secondDigit">0</span>
+        </p>
+        <p id="cycleCount">Cycle Count: <%= cycleCount %></p>
+        <p id="cycleId">Cycle ID: <%= cycleId %></p> <!-- Display cycle ID -->
+    </div>
+</body>
+</html>

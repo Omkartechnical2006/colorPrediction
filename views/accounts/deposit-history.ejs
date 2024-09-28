@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deposit History</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .scroll-container {
+            padding: 20px;
+            margin-bottom: 100px;
+        }
+
+        .deposit-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .deposit-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background-color: #fff;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+
+        .deposit-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-item {
+            margin-bottom: 10px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="scroll-container">
+        <h1 class="deposit-title">Deposit History</h1>
+
+        <!-- Filter Options -->
+        <div class="mb-4 text-center">
+            <label class="mr-3">
+                <input type="checkbox" id="approvedCheckbox" onclick="filterDeposits('approved')"> Approved
+            </label>
+            <label class="mr-3">
+                <input type="checkbox" id="rejectedCheckbox" onclick="filterDeposits('rejected')"> Rejected
+            </label>
+            <label>
+                <input type="checkbox" id="pendingCheckbox" onclick="filterDeposits('pending')"> Pending
+            </label>
+        </div>
+
+        <div class="card-container">
+            <% deposits.forEach(deposit=> { %>
+            <div class="deposit-card" data-status="<%= deposit.status %>">
+                <div class="card-item">
+                    <strong>Date:</strong> <%= deposit.date.toLocaleString() %>
+                </div>
+                <div class="card-item">
+                    <strong>Transaction ID:</strong> <%= deposit.transactionId %>
+                </div>
+                <div class="card-item">
+                    <strong>Amount:</strong> ₹<%= deposit.amount %>
+                </div>
+                <div class="card-item">
+                    <strong>Status:</strong> <%= deposit.status %>
+                </div>
+            </div>
+            <% }) %>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-light p-3 text-center">
+        <%- include("../partials/custom-footer.ejs") %>
+    </footer>
+
+    <script>
+        function filterDeposits(status) {
+            const approvedCheckbox = document.getElementById('approvedCheckbox');
+            const rejectedCheckbox = document.getElementById('rejectedCheckbox');
+            const pendingCheckbox = document.getElementById('pendingCheckbox');
+            const depositCards = document.querySelectorAll('.deposit-card');
+
+            // Ensure only one checkbox is selected at a time
+            if (status === 'approved') {
+                rejectedCheckbox.checked = false;
+                pendingCheckbox.checked = false;
+            } else if (status === 'rejected') {
+                approvedCheckbox.checked = false;
+                pendingCheckbox.checked = false;
+            } else if (status === 'pending') {
+                approvedCheckbox.checked = false;
+                rejectedCheckbox.checked = false;
+            }
+
+            // Show all cards if no checkbox is checked
+            if (!approvedCheckbox.checked && !rejectedCheckbox.checked && !pendingCheckbox.checked) {
+                depositCards.forEach(card => {
+                    card.style.display = 'block';
+                });
+                return;
+            }
+
+            // Filter the deposit cards based on selected status
+            depositCards.forEach(card => {
+                const cardStatus = card.getAttribute('data-status');
+                if (approvedCheckbox.checked && cardStatus === 'approved') {
+                    card.style.display = 'block';
+                } else if (rejectedCheckbox.checked && cardStatus === 'rejected') {
+                    card.style.display = 'block';
+                } else if (pendingCheckbox.checked && cardStatus === 'pending') {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

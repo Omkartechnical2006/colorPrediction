@@ -1,0 +1,107 @@
+<!-- Add this CSS to style the table with a border and glassmorphism effect -->
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: url('your-background-image.jpg') no-repeat center center fixed;
+        background-size: cover;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        /* align-items: center; */
+        overflow-y: scroll!important;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 900px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.15); /* Frosted glass effect */
+        background-color: black;
+        border-radius: 20px;
+        backdrop-filter: blur(10px); /* Blur for glass effect */
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); /* Softer shadow */
+        border: 2px solid rgba(255, 255, 255, 0.5); /* Border with more opacity */
+        margin: 50px auto;
+    }
+
+    h2 {
+        text-align: center;
+        color: white!important;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: rgba(255, 255, 255, 0.25); /* Slightly transparent background */
+        margin-top: 20px;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 2px solid rgba(255, 255, 255, 0.3); /* Border around the table */
+    }
+
+    table, th, td {
+        border: 1px solid rgba(255, 255, 255, 0.2); /* Light border inside table */
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: center;
+        color: white;
+    }
+
+    thead {
+        background: rgba(255, 255, 255, 0.3); /* Transparent header */
+    }
+
+    tbody tr:hover {
+        background: rgba(255, 255, 255, 0.1); /* Row hover effect */
+    }
+
+    p {
+        color: white;
+        text-align: center;
+        font-size: 16px;
+    }
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 768px) {
+        .container {
+            padding: 15px;
+        }
+
+        table, th, td {
+            font-size: 14px;
+        }
+
+        h2 {
+            font-size: 18px;
+        }
+    }
+</style>
+
+<!-- user-withdraw-history.ejs -->
+<div class="container">
+    <h2>Withdrawal History</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% withdrawals.forEach(withdrawal => { %>
+                <tr>
+                    <td><%= withdrawal.date.toDateString() %></td>
+                    <td><%= withdrawal.amount %></td>
+                    <td><%= withdrawal.status %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>
+<%-include("../partials/custom-footer.ejs")%>

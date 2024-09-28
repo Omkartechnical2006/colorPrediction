@@ -1,0 +1,84 @@
+<style>
+    body {
+    background: #000; /* Adjust as needed */
+    color: #fff; /* Default text color */
+    font-family: Arial, sans-serif; /* Change font as desired */
+}
+
+.withdraw-form {
+    max-width: 400px; /* Limit form width */
+    margin: auto; /* Center the form */
+}
+
+.form-group {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.form-control {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    color: #fff;
+    width: 100%; /* Ensure full width */
+}
+
+.form-control:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+}
+
+.btn-success {
+    background-color: rgba(76, 175, 80, 0.8);
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    color: white;
+    transition: background-color 0.3s;
+}
+.btn-back{
+    background-color: rgba(246, 142, 51, 0.8);
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+.btn-success:hover {
+    background-color: rgba(76, 175, 80, 1);
+}
+.toprule{
+    display: flex;
+    justify-content: space-around;
+}
+
+</style>
+<div class="toprule">
+    <%- include("../partials/flash.ejs") %>
+    <h2>Withdraw Funds</h2>
+    <button onclick="window.location.href='/main'" class="btn btn-back">BACK</button>
+</div>
+<form action="/main/withdraw" method="POST" class="withdraw-form">
+    <div class="form-group">
+        <input type="text" name="accountDetails" class="form-control" placeholder="UPI ID or Bank Account" required>
+    </div>
+    <div class="form-group">
+        <input type="number" name="amount" class="form-control" placeholder="Amount" required>
+    </div>
+    <button type="submit" class="btn btn-success">Withdraw</button>
+</form>
+<!-- Display error if balance is insufficient -->
+ <p style="font-weight: bold; text-align: center;">
+    <span style="color: red;">Important Notice:</span>
+     Please be aware that an 18% GST will be deducted from your withdrawal amount. <br> The total amount you receive will reflect this deduction.</p>
+     <div style="text-align: center">
+        <br><br>
+        <p style="color: orange;">If you need, any Guidance Please Cotact us! <br>CUSTOMER EXECUTIVE</p>
+     <%-include("../partials/customer-service.ejs")%>
+    </div>
