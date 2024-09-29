@@ -1,9 +1,9 @@
 const WebSocket = require('ws'); // Add this line at the top
 
-let timeLeft = 30;      // Timer starts from 30 seconds
+let timeLeft = 60;      // Timer starts from 30 seconds
 let cycleCount = 1;     // Start cycle count from 1
 let currentDate = createDateId(); // Create initial date ID
-let currentCycleId = `${currentDate}${String(cycleCount).padStart(2, '0')}`; // Initialize cycle ID
+currentCycleId = `${currentDate}${cycleCount}`; // Initialize cycle ID
 
 function createDateId() {
     const now = new Date();
@@ -26,9 +26,9 @@ function startTimer(wss, saveCycleToDB) {
 
         // When time reaches 0, reset the timer and save the new cycle ID
         if (timeLeft === 0) {
-            timeLeft = 30; // Reset timer
+            timeLeft = 60; // Reset timer
             cycleCount++; // Increment cycle count
-            currentCycleId = `${currentDate}${String(cycleCount).padStart(2, '0')}`; // Update cycle ID
+            currentCycleId = `${currentDate}${String(cycleCount)}`; // Update cycle ID
 
             saveCycleToDB(currentCycleId); // Save the current cycle to MongoDB
 

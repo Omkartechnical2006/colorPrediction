@@ -24,7 +24,6 @@ async function saveCycleToDB(cycleId) {
         // Now save the new cycle ID
         const newCycle = new Cycle({ cycleId });
         await newCycle.save();
-
         // console.log(`Cycle saved: ${cycleId}`);
     } catch (err) {
         console.error("Error saving cycle to DB:", err);
