@@ -6,7 +6,7 @@ function startWebSocketServer(port) {
     wss.on('connection', (ws) => {
         console.log('Client connected');
         // Send the initial state to the newly connected client
-        ws.send(JSON.stringify({ timeLeft: 30, cycleCount: 1, cycleId: 'initial' }));
+        ws.send(JSON.stringify({ timeLeft: 60, cycleCount: 1, cycleId: 'initial' }));
         // Optionally send initial data to the client
         sendInitialResults(ws);//my remove
         ws.on('close', () => {
