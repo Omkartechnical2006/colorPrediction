@@ -13,7 +13,6 @@ function startWebSocketServer(port) {
             console.log('Client disconnected');
         });
     });
-
     return wss;
 }
 
