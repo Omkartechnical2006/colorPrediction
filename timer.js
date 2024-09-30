@@ -41,8 +41,10 @@ function startTimer(wss, saveCycleToDB) {
                 currentDate = newDate;
                 cycleCount = 1; // Reset cycle count for a new day
             }
-            // Update the currentCycleId, pad cycleCount to 2 digits (e.g., 01, 02, etc.)
-            currentCycleId = `${currentDate}${String(cycleCount).padStart(5, '0')}`;
+
+            // Dynamically calculate padding based on the current cycle count
+            const paddingLength = Math.max(2, cycleCount.toString().length); // Ensure a minimum padding of 2 digits
+            currentCycleId = `${currentDate}${String(cycleCount).padStart(paddingLength, '0')}`;
 
             saveCycleToDB(currentCycleId); // Save the current cycle to MongoDB
 

@@ -197,7 +197,7 @@ async function initializeCycle() {
         const year = now.getFullYear().toString();
         const month = String(now.getMonth() + 1).padStart(2, '0');
         const day = String(now.getDate()).padStart(2, '0');
-        const initialCycleId = `${year}${month}${day}00001`;
+        const initialCycleId = `${year}${month}${day}01`;
         // Create and save the initial cycle
         const newCycle = new Cycle({
             cycleId: initialCycleId,

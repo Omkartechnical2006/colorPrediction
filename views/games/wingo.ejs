@@ -25,9 +25,12 @@
 
         /* Hide scrollbar for IE, Edge, and Firefox */
         #results {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
         }
+
         @media only screen and (max-width: 495px) {
             .Betting__C-multiple-l {
                 display: none;
@@ -96,14 +99,17 @@
             display: none;
             /* For Chrome, Safari, and Opera */
         }
-        .green{
-            color: green!important;
+
+        .green {
+            color: green !important;
         }
-        .red{
-            color: #d23838!important;
+
+        .red {
+            color: #d23838 !important;
         }
-        .violet{
-            color: #9b48db!important;
+
+        .violet {
+            color: #9b48db !important;
         }
 
         .n0 {
@@ -210,105 +216,111 @@
             padding: 10px;
         }
     </style>
-    <script>
-        let ws;
-        let beepAudio = new Audio('audio/beep.mp3'); // Load your beep audio file
-        let endAudio = new Audio('audio/end.mp3'); // Load your end audio file
-        let beepInterval;
-        window.onload = () => {
-            // Establish WebSocket connection
-            ws = new WebSocket('ws://localhost:8080');
-    
-            ws.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                console.log("Received data:", data);
-    
-                // Display the results
-                if (Array.isArray(data)) {
-                    displayResults(data);  // Only call if `data` is the results array
-                }
-    
-                const timeLeft = data.timeLeft.toString().padStart(2, '0'); // Ensure two digits
-                const firstDigit = timeLeft[0]; // First digit
-                const secondDigit = timeLeft[1]; // Second digit
-    
-                // Update displayed digits
-                document.getElementById('firstDigit').innerText = firstDigit;
-                document.getElementById('secondDigit').innerText = secondDigit;
-    
-                // Update cycle ID
-                document.getElementById('cycleId').innerText = data.cycleId;
-    
-                // Update class names based on the current digits
-                const firstDiv = document.getElementById('firstDigitDiv');
-                const secondDiv = document.getElementById('secondDigitDiv');
-                firstDiv.className = `n${firstDigit}`;
-                secondDiv.className = `n${secondDigit}`;
-    
-                // Disable choice between 5 and 1 seconds
-                let choice = document.getElementById("choose-choice");
-                const overlayTimer = document.getElementById('overlayTimer');
-    
-                if (data.timeLeft > 1 && data.timeLeft <= 5) {
-                    choice.classList.add("disabled");
-                    overlayTimer.innerText = data.timeLeft;
-                    overlayTimer.style.display = 'block';
-    
-                    if (!beepInterval) {
-                        beepInterval = setInterval(() => {
-                            beepAudio.currentTime = 0; // Reset audio to start
-                            beepAudio.play();
-                        }, 1000); // Play beep every second
-                    }
-                } else if (data.timeLeft === 0) {
-                    clearInterval(beepInterval); // Stop beep sound
-                    beepInterval = null; // Reset interval
-                    endAudio.play(); // Play end sound
-                    overlayTimer.style.display = 'none';
-                    choice.classList.remove("disabled");
-                } else {
-                    // Clear beep interval if the time is above 5 seconds
-                    clearInterval(beepInterval);
-                    beepInterval = null;
-                }
-            };
-    
-            ws.onclose = () => {
-                console.log('WebSocket connection closed');
-            };
-    
-            // Function to display game results
-            function displayResults(results) {
-                const resultsDiv = document.getElementById('results');
-    
-                // Ensure results is an array
-                if (!Array.isArray(results)) {
-                    console.error('Expected results to be an array, but received:', results);
-                    return;
-                }
-    
-                resultsDiv.innerHTML = ''; // Clear previous results
-                results.forEach(result => {
-                    resultsDiv.innerHTML += `
-                        <div data-v-481307ec="" class="van-row">
-                            <div data-v-481307ec="" class="van-col van-col--8">${result.currCycleId}</div>
-                            <div data-v-481307ec="" class="van-col van-col--5 numcenter">
-                                <div data-v-481307ec="" class="GameRecord__C-body-num ${result.colorResult}">${result.numberResult}</div>
-                            </div>
-                            <div data-v-481307ec="" class="van-col van-col--5">
-                                <span data-v-481307ec="">${result.bigSmallResult}</span>
-                            </div>
-                            <div data-v-481307ec="" class="van-col van-col--6">
-                                <div data-v-481307ec="" class="GameRecord__C-origin">
-                                    <div data-v-481307ec="" class="GameRecord__C-origin-I ${result.colorResult}"></div>
-                                </div>
-                            </div>
-                        </div>`;
-                });
+   <script>
+    let ws;
+    let beepAudio = new Audio('audio/beep.mp3'); // Load your beep audio file
+    let endAudio = new Audio('audio/end.mp3'); // Load your end audio file
+    let beepInterval;
+
+    window.onload = () => {
+        // Establish WebSocket connection
+        ws = new WebSocket('ws://localhost:8080');
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            console.log("Received data:", data);
+
+            if (Array.isArray(data)) {
+                displayResults(data); // Only call if `data` is the results array
             }
+
+            const timeLeft = data.timeLeft.toString().padStart(2, '0'); // Ensure two digits
+            const firstDigit = timeLeft[0]; // First digit
+            const secondDigit = timeLeft[1]; // Second digit
+
+            // Update displayed digits
+            document.getElementById('firstDigit').innerText = firstDigit;
+            document.getElementById('secondDigit').innerText = secondDigit;
+
+            // Update cycle ID
+            document.getElementById('cycleId').innerText = data.cycleId;
+
+            // Update class names based on the current digits
+            const firstDiv = document.getElementById('firstDigitDiv');
+            const secondDiv = document.getElementById('secondDigitDiv');
+            firstDiv.className = `n${firstDigit}`;
+            secondDiv.className = `n${secondDigit}`;
+
+            // Handle disabling choice and overlay between 5 and 1 seconds
+            handleChoiceAndOverlay(data.timeLeft);
         };
-    </script>
-    </head>
+
+        ws.onclose = () => {
+            console.log('WebSocket connection closed');
+        };
+
+        // Function to handle disabling choice and showing overlay
+        function handleChoiceAndOverlay(timeLeft) {
+            let choice = document.getElementById("choose-choice");
+            const overlayTimer = document.getElementById('overlayTimer');
+
+            if (timeLeft > 1 && timeLeft <= 5) {
+                choice.classList.add("disabled");
+                overlayTimer.innerText = timeLeft;
+                overlayTimer.style.display = 'block';
+
+                if (!beepInterval) {
+                    beepInterval = setInterval(() => {
+                        beepAudio.currentTime = 0; // Reset audio to start
+                        beepAudio.play();
+                    }, 1000); // Play beep every second
+                }
+            } else if (timeLeft === 0) {
+                clearInterval(beepInterval); // Stop beep sound
+                beepInterval = null; // Reset interval
+                endAudio.play(); // Play end sound
+                overlayTimer.style.display = 'none';
+                choice.classList.remove("disabled");
+            } else {
+                // Clear beep interval if the time is above 5 seconds
+                clearInterval(beepInterval);
+                beepInterval = null;
+            }
+        }
+
+        // Function to display game results (only recent 10)
+        function displayResults(results) {
+            const resultsDiv = document.getElementById('results');
+            // Ensure results is an array
+            if (!Array.isArray(results)) {
+                console.error('Expected results to be an array, but received:', results);
+                return;
+            }
+
+            resultsDiv.innerHTML = ''; // Clear previous results
+            results.forEach(result => {
+                resultsDiv.innerHTML += `
+                    <div data-v-481307ec="" class="van-row">
+                        <div data-v-481307ec="" class="van-col van-col--8">${result.currCycleId}</div>
+                        <div data-v-481307ec="" class="van-col van-col--5 numcenter">
+                            <div data-v-481307ec="" class="GameRecord__C-body-num ${result.colorResult}">${result.numberResult}</div>
+                        </div>
+                        <div data-v-481307ec="" class="van-col van-col--5">
+                            <span data-v-481307ec="">${result.bigSmallResult}</span>
+                        </div>
+                        <div data-v-481307ec="" class="van-col van-col--6">
+                            <div data-v-481307ec="" class="GameRecord__C-origin">
+                                <div data-v-481307ec="" class="GameRecord__C-origin-I ${result.colorResult}"></div>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+        }
+    };
+</script>
+
+</head>
+
 <body style="font-size: 12px;">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
         style="position: absolute; width: 0; height: 0">
@@ -332,7 +344,7 @@
                         <div class="van-skeleton__content"><!---->
                             <div class="van-skeleton-paragraph" style="width: 100%;"></div>
                             <div class="van-skeleton-paragraph" style="width: 100%;"></div>
-                            <div class="van-skeleton-paragraph" stylcls e="width: 100%;"></div>
+                            <div class="van-skeleton-paragraph" style="width: 100%;"></div>
                             <div class="van-skeleton-paragraph" style="width: 100%;"></div>
                             <div class="van-skeleton-paragraph" style="width: 100%;"></div>
                             <div class="van-skeleton-paragraph" style="width: 100%;"></div>
@@ -364,7 +376,82 @@
                         </div>
                     </div>
                 </div>
-            </div>v-if
+            </div>
+            
+            
+            
+            <!-- popup how to play -->
+            <!-- <div role="dialog" tabindex="0" class="van-popup van-popup--round van-popup--center" data-v-0bba67ea=""
+                style="z-index: 2004;">
+                <div data-v-0bba67ea="" class="TimeLeft__C-PreSale">
+                    <div data-v-0bba67ea="" class="TimeLeft__C-PreSale-head">How to play</div>
+                    <div data-v-0bba67ea="" class="TimeLeft__C-PreSale-body">
+                        <div data-v-0bba67ea="">
+                            <p>
+                                <span face="Arial, Microsoft YaHei, \\5FAE软雅黑, \\5B8B体, Malgun Gothic, Meiryo, sans-serif">
+                                    1 minutes 1 issue, 45 seconds to order, 15 seconds waiting for the draw. It opens
+                                    all day. The total number of trade is 1440 issues.</span><br>
+                            </p>
+                            <p>
+                                <span
+                                    face="Arial, Microsoft YaHei, \\5FAE软雅黑, \\5B8B体, Malgun Gothic, Meiryo, sans-serif">
+                                    If you spend 100 to trade, after deducting 2 service fee, your contract amount is
+                                    98:</span>
+                            </p>
+                            <p>
+                                <span
+                                    face="Arial, Microsoft YaHei, \\5FAE软雅黑, \\5B8B体, Malgun Gothic, Meiryo, sans-serif">
+                                    1.</span><span
+                                    style="font-family: Arial,Microsoft YaHei,\\5FAE软雅黑,\\5B8B体,Malgun Gothic, Meiryo, sans-serif;">Select</span>
+                                <spna
+                                    face="Arial, Microsoft YaHei, \\5FAE软雅黑, \\5B8B体, Malgun Gothic, Meiryo, sans-serif">
+                                    green: if the result shows 1,3,7,9 you will get (98*2) 196;If the result shows 5,
+                                    you will get (98*1.5) 147</spna>
+                            </p>
+                            <p>
+                                <span
+                                    face="Arial, Microsoft YaHei, \\5FAE软雅黑, \\5B8B体, Malgun Gothic, Meiryo, sans-serif">
+                                    2.</span><span
+                                    style="font-family: Arial,Microsoft YaHei,\\5FAE软雅黑,\\5B8B体,Malgun Gothic, Meiryo, sans-serif;">Select</span>
+                                <span
+                                    face="Arial, Microsoft YaHei, \\5FAE软雅黑, \\5B8B体, Malgun Gothic, Meiryo, sans-serif">
+                                    red: if the result shows 2,4,6,8 you will get (98*2) 196;If the result shows 0, you
+                                    will get (98*1.5) 147</span>
+                            </p>
+                            <p>
+                                <span
+                                    face="Arial, Microsoft YaHei, \\5FAE软雅黑, \\5B8B体, Malgun Gothic, Meiryo, sans-serif">
+                                    3.</span><span
+                                    style="font-family: Arial,Microsoft YaHei,\\5FAE软雅黑,\\5B8B体,Malgun Gothic, Meiryo, sans-serif;">Select</span>
+                                <span
+                                    face="Arial, Microsoft YaHei, \\5FAE软雅黑, \\5B8B体, Malgun Gothic, Meiryo, sans-serif">
+                                    violet:if the result shows 0 or 5, you will get (98*4.5) 441</span>
+                            </p>
+                            <p>
+                                <span
+                                    face="Arial, Microsoft YaHei, \\5FAE软雅黑, \\5B8B体, Malgun Gothic, Meiryo, sans-serif">
+                                    4. Select number:if the result is the same as the number you selected, you will get
+                                    (98*9) 882</span>
+                            </p>
+                            <p>
+                                <span
+                                    face="Arial, Microsoft YaHei, \\5FAE软雅黑, \\5B8B体, Malgun Gothic, Meiryo, sans-serif">
+                                    5. Select big: if the result shows 5,6,7,8,9 you will get (98 * 2) 196</span>
+                            </p>
+                            <p>
+                                <span
+                                    face="Arial, Microsoft YaHei, \\5FAE软雅黑, \\5B8B体, Malgun Gothic, Meiryo, sans-serif">
+                                    6. Select small: if the result shows 0,1,2,3,4 you will get (98 * 2) 196</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div data-v-0bba67ea="" class="TimeLeft__C-PreSale-foot">
+                        <div data-v-0bba67ea="" class="TimeLeft__C-PreSale-foot-btn">Close</div>
+                    </div>
+                </div>
+            </div> -->
+            <!-- end  -->
+
             <div data-v-5d71c3fd="" class="WinGo__C" style="--f13b4d11-currentFontFamily: Roboto, Inter, sans-serif;">
                 <div data-v-12a80a3e="" data-v-5d71c3fd="" class="navbar main">
                     <div data-v-12a80a3e="" class="navbar-fixed">
@@ -388,6 +475,8 @@
                         </div>
                     </div>
                 </div><!-- 钱包余额 -->
+                <!-- end  -->
+
                 <div data-v-7dd1adab="" data-v-5d71c3fd="" class="Wallet__C">
                     <div data-v-7dd1adab="" class="Wallet__C-balance">
                         <div data-v-7dd1adab="" class="Wallet__C-balance-l1">
@@ -421,7 +510,7 @@
                 </div><!-- 游戏类型 -->
                 <!-- gameslist  -->
                 <!-- include gameslist.ejs from partials  -->
-                 <!-- include("../partials/gameslist.ejs") -->
+                <!-- include("../partials/gameslist.ejs") -->
                 <!-- 游戏开始时间倒计时 -->
                 <div data-v-3e4c6499="" class="TimeLeft__C">
                     <div data-v-3e4c6499="" class="TimeLeft__C-rule"><svg data-v-3e4c6499=""
@@ -499,7 +588,8 @@
                             <div data-v-481307ec="" class="van-col van-col--6">Color</div>
                         </div>
                     </div>
-                    <div data-v-481307ec="" class="GameRecord__C-body" id="results" style="overflow-y: scroll; max-height: 300px!important;">
+                    <div data-v-481307ec="" class="GameRecord__C-body" id="results"
+                        style="overflow-y: scroll; max-height: 300px!important;">
                         <!-- result will be declared here  -->
                     </div>
                     <div data-v-3e71d3da="" data-v-5d71c3fd="" class="dialog inactive">
@@ -525,7 +615,9 @@
             <%-include("../partials/popup-choose.ejs")%>
                 <!-- end  -->
                 <script>
-                    const bettingItems = document.querySelectorAll('.Betting__C-multiple-r');
+                const resultsDiv = document.getElementById('results');
+                resultsDiv.innerHTML='';
+                const bettingItems = document.querySelectorAll('.Betting__C-multiple-r');
 
                     bettingItems.forEach(item => {
                         item.addEventListener('click', () => {
